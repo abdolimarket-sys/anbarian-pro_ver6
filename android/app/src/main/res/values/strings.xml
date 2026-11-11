@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">انبارین</string>
+    <string name="title_activity_main">انبارین</string>
+    <string name="package_name">com.anbarian.app</string>
+    <string name="custom_url_scheme">com.anbarian.app</string>
+</resources>
