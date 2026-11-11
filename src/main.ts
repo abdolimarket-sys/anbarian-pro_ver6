@@ -718,8 +718,8 @@ function renderShell() {
           </label>
           <label class="field" style="margin-top:8px;display:block">
             <span style="font-size:.82rem;font-weight:700;color:var(--text-soft)">فایل لایسنس امضاشده (.anblic)</span>
-            <p class="hint" style="margin:0 0 6px">روش اصلی آفلاین: فایل امضاشده <code>.anblic</code> (RSA). کلید متنی فقط برای سازگاری است.</p>
-            <input id="offlineLicenseFile" type="file" accept=".anblic,.json,application/json" style="width:100%;margin-top:4px" />
+            <p class="hint" style="margin:0 0 6px">فایل لایسنس صادرشده را انتخاب کنید. فایل با محتوای معتبر امضاشده بررسی می‌شود؛ پسوند فایل محدود نشده است.</p>
+            <input id="offlineLicenseFile" type="file" style="width:100%;margin-top:4px" />
           </label>
           <div class="auto-backup-actions" style="margin-top:10px">
             <button type="button" class="btn btn-sm auto-backup-btn" id="btnActivateOfflineLicense" data-license-role="activate-file">فعال‌سازی لایسنس آفلاین (فایل)</button>
@@ -1307,6 +1307,11 @@ function bindEvents() {
   document.getElementById('btnCopyTeamCode')?.addEventListener('click', () => copyTeamSessionCode());
   document.getElementById('btnActivateLicense')?.addEventListener('click', () => activateLicenseFromInput());
   document.getElementById('btnDeactivateLicense')?.addEventListener('click', () => deactivateLicense());
+  document.getElementById('offlineLicenseFile')?.addEventListener('change', (event) => {
+    const input = event.currentTarget as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) toast('فایل انتخاب شد: ' + file.name, 'success');
+  });
   document.getElementById('btnActivateOfflineLicense')?.addEventListener('click', async () => {
     const input = document.getElementById('offlineLicenseFile') as HTMLInputElement | null;
     const file = input?.files?.[0];
