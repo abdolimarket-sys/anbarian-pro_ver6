@@ -927,10 +927,10 @@ function buildInvoiceHtml(invoiceId:string, opts?:{internal?:boolean}):{title:st
   const internal=!!opts?.internal && invoice.type==='sale';
   // برای فاکتور قطعی فروش، بهای واقعی از movement؛ برای پیش‌نویس برآورد از موجودی
   const lineProfit=invoice.lines.map(l=>{
-    if(!internal || !l.productId) return {cogs:0, known:false as boolean};
+    if(!internal || !l.productId) return {cogsRial:0, known:false as boolean};
     if(invoice.status==='posted' && costingCache){
       const mov=costingCache.movements.find(m=>m.sourceDocumentId===invoice.id&&m.productId===l.productId&&m.type==='sale');
-      if(mov) return {cogs:Math.max(0,mov.totalCostRial), known:true};
+      if(mov) return {cogsRial:Math.max(0,mov.totalCostRial), known:true};
     }
     return estimateLineCogsRial(l.productId, l.quantityMilli, l.warehouse);
   });
@@ -939,10 +939,10 @@ function buildInvoiceHtml(invoiceId:string, opts?:{internal?:boolean}):{title:st
     const base=`<td>${n+1}</td><td>${esc(l.description)}</td><td>${esc(l.unit||'عدد')}</td><td>${fa(l.quantityMilli/1000)}</td><td>${money(l.unitPriceRial)}</td><td>${money(l.discountRial||0)}</td><td>${money(l.totalRial)}</td>`;
     if(!internal) return `<tr>${base}</tr>`;
     const p=lineProfit[n];
-    if(p.known){ cogsSum+=p.cogs; costedRev+=l.totalRial; }
-    const gp=p.known?l.totalRial-p.cogs:null;
+    if(p.known){ cogsSum+=p.cogsRial; costedRev+=l.totalRial; }
+    const gp=p.known?l.totalRial-p.cogsRial:null;
     const margin=p.known&&l.totalRial>0?`${fa(Math.round((gp!/l.totalRial)*1000)/10)}٪`:'—';
-    return `<tr>${base}<td>${p.known?money(p.cogs):'نامشخص'}</td><td>${gp!==null?money(gp):'—'}</td><td>${margin}</td></tr>`;
+    return `<tr>${base}<td>${p.known?money(p.cogsRial):'نامشخص'}</td><td>${gp!==null?money(gp):'—'}</td><td>${margin}</td></tr>`;
   }).join('');
   const paymentLines=(invoice.paymentParts||[]).map(x=>{
     const label=x.method==='cash'?'نقدی':x.method==='card'?'کارت':x.method==='cheque'?`چک ${x.chequeNumber||''} · ${x.chequeBank||''} · شناسه ${x.chequeAccount||'—'} · سررسید ${x.chequeDueDate||''}`:'اعتباری (مانده حساب)';
@@ -965,7 +965,7 @@ function buildInvoiceHtml(invoiceId:string, opts?:{internal?:boolean}):{title:st
     'اقلام:',
     ...invoice.lines.map((l,n)=>{
       const p=lineProfit[n];
-      const extra=internal?(p.known?` | بهای ${money(p.cogs)} | سود ${money(l.totalRial-p.cogs)}`:' | بهای نامشخص'):'';
+      const extra=internal?(p.known?` | بهای ${money(p.cogsRial)} | سود ${money(l.totalRial-p.cogsRial)}`:' | بهای نامشخص'):'';
       return `${n+1}) ${l.description} | ${fa(l.quantityMilli/1000)} ${l.unit||'عدد'} | ${money(l.unitPriceRial)} | مبلغ ${money(l.totalRial)}${extra}`;
     }),
     '',
