@@ -1,0 +1,3308 @@
+:root {
+  --primary: #08734f;
+  --primary-dark: #075c4d;
+  --primary-deeper: #06473f;
+  --primary-soft: #e5f3e8;
+  --accent: #f39200;
+  --bg: #f7fcf8;
+  --bg2: #edf7ef;
+  --card: #ffffff;
+  --text: #12483d;
+  --text-soft: #617d70;
+  --danger: #e11d48;
+  --warning: #d97706;
+  --success: #059669;
+  --border: #b9ddc2;
+  --border-light: #dceee0;
+  --shadow: 0 4px 20px rgba(7, 92, 77, 0.10);
+  --shadow-sm: 0 2px 8px rgba(7, 92, 77, 0.08);
+  --radius: 16px;
+  --radius-sm: 12px;
+  --nav-h: 64px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+[data-theme='dark'] {
+  --bg: #0b1f1c;
+  --bg2: #0f2925;
+  --card: #132e2a;
+  --text: #e0f2f1;
+  --text-soft: #94a3b8;
+  --border: #1e4a44;
+  --border-light: #1a3c37;
+  --primary-soft: #134e4a;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, system-ui, -apple-system, sans-serif;
+  background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 120px, var(--bg) 100%);
+  color: var(--text);
+  min-height: 100dvh;
+  padding-bottom: calc(var(--nav-h) + var(--safe-b) + 8px);
+  line-height: 1.55;
+  font-size: 15px;
+}
+
+header {
+  background: linear-gradient(135deg, #06473f 0%, #075c4d 58%, #08734f 100%);
+  color: #fff;
+  padding: 14px 16px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: var(--shadow);
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.logo-area { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.logo-area .brand-logo { width: 44px; height: 44px; object-fit: contain; flex: 0 0 auto; border-radius: 8px; }
+.logo-area .brand-title { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.logo-area .role-badge { margin-inline-start: 2px; }
+
+.logo-area strong {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.logo-area .version {
+  display: block;
+  font-size: 0.7rem;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+.header-stats {
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+
+main {
+  padding: 16px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+}
+
+.card h2 {
+  font-size: 1.15rem;
+  margin-bottom: 8px;
+  color: var(--primary-dark);
+}
+
+.hint {
+  color: var(--text-soft);
+  font-size: 0.88rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.stat-card {
+  background: var(--primary-soft);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  margin-top: 2px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: transform 0.12s, opacity 0.12s;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+}
+
+.btn-secondary {
+  background: var(--card);
+  color: var(--primary-dark);
+  border: 1px solid var(--primary);
+  box-shadow: 0 1px 2px rgba(15, 118, 110, 0.10);
+}
+
+/* حالت فعال باید از حالت غیرفعال کاملاً قابل تشخیص باشد؛ مخصوص صفحه موبایل */
+.btn:disabled, .btn[aria-disabled='true'] {
+  background: #e5e7eb !important;
+  background-image: none !important;
+  color: #6b7280 !important;
+  border-color: #d1d5db !important;
+  box-shadow: none !important;
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+
+.btn-secondary:not(:disabled):active {
+  background: var(--primary-soft);
+}
+
+/* دکمه‌های لاگ باید در حالت فعال از پس‌زمینه کارت واضحاً متمایز باشند. */
+.btn-audit-export {
+  background: #075c4d;
+  color: #ffffff;
+  border: 1px solid #075c4d;
+  box-shadow: 0 2px 5px rgba(15, 118, 110, 0.22);
+}
+.btn-audit-clear {
+  background: #be123c;
+  color: #ffffff;
+  border: 1px solid #9f1239;
+  box-shadow: 0 2px 5px rgba(190, 18, 60, 0.18);
+}
+.btn-audit-export:hover:not(:disabled) { background: #115e59; }
+.btn-audit-clear:hover:not(:disabled) { background: #9f1239; }
+.btn-audit-export:disabled, .btn-audit-clear:disabled {
+  background: #e5e7eb !important;
+  color: #6b7280 !important;
+  border-color: #d1d5db !important;
+  box-shadow: none !important;
+}
+
+.filter-chip {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+
+.btn-block {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-list {
+  list-style: none;
+  margin-top: 12px;
+}
+
+.info-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.9rem;
+}
+
+.info-list code {
+  background: var(--primary-soft);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+/* Navigation */
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--nav-h) + var(--safe-b));
+  padding-bottom: var(--safe-b);
+  background: var(--card);
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.nav-item {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-soft);
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 10px 4px;
+}
+
+.nav-item.active {
+  color: var(--primary-dark);
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: calc(var(--nav-h) + 24px);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1e293b;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s ease;
+  z-index: 30000; /* بالاتر از برگه فاکتور/تسویه تا پیام دیده شود */
+  max-width: 90vw;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.error {
+  background: linear-gradient(135deg, #f43f5e, #e11d48);
+}
+
+.toast.success {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.toast.info {
+  background: linear-gradient(135deg, #08734f, #075c4d);
+}
+
+/* ——— Scanner ——— */
+.scan-guide {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scan-guide-frame {
+  width: 88%;
+  height: 38%;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.28), 0 0 14px rgba(16, 185, 129, 0.55);
+}
+
+.scan-guide-label {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.78rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+#scanner-container {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  background: #0b1f1c;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+#scanner-container video,
+#scanner-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.scanner-toolbar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.manual-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.manual-row input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-size: 1rem;
+  direction: ltr;
+  text-align: left;
+  background: var(--card);
+  color: var(--text);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+}
+
+/* Virtual list */
+.vlist {
+  height: min(40vh, 360px);
+  overflow: auto;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  background: var(--card);
+  -webkit-overflow-scrolling: touch;
+}
+.vlist-tall {
+  height: min(55vh, 480px);
+}
+.vrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-light);
+  direction: rtl;
+}
+.vrow-main { flex: 1; min-width: 0; }
+.vrow-name {
+  font-weight: 700;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vrow-meta {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vrow-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.vrow-sys, .vrow-count-val {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--primary-dark);
+}
+.vrow-badge {
+  font-size: 0.72rem;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+.vrow-diff { font-size: 0.78rem; font-weight: 700; }
+
+.filter-chip {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text-soft);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.filter-chip.active {
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  border-color: var(--primary);
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+/* Modals */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.scanner-modal {
+  background: rgba(0, 0, 0, 0.72);
+  align-items: flex-end;
+  z-index: 200;
+}
+.modal-sheet {
+  background: var(--card);
+  width: 100%;
+  max-width: 480px;
+  border-radius: 20px 20px 0 0;
+  padding: 16px 16px calc(16px + var(--safe-b));
+  max-height: 90vh;
+  overflow: auto;
+}
+.modal-card {
+  background: var(--card);
+  box-sizing: border-box;
+  width: calc(100% - 24px);
+  max-width: 360px;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+/* مودال تعداد بالاتر از اسکنر (10300) تا زیر برگه اسکنر نماند */
+.qty-modal,
+#qtyModal.show,
+#qtyModal[style*="flex"] {
+  z-index: 10450 !important;
+}
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  width: 100%;
+  min-width: 0;
+}
+.qty-step {
+  flex: 0 0 42px;
+  width: 42px;
+  min-width: 42px;
+  height: 46px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+.qty-input {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+  padding: 12px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.session-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--primary-soft);
+  border-radius: 12px;
+}
+.phase-bar {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+.set-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.set-row input[type="text"],
+.set-row select {
+  max-width: 55%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.88rem;
+}
+.set-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary);
+}
+
+.role-badge {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  vertical-align: middle;
+}
+.role-locked {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+}
+select.search-input {
+  appearance: auto;
+}
+
+/* Role selector: clear, accessible permission preview without changing existing layout rules. */
+.role-settings-panel {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(145deg, var(--card), var(--bg));
+}
+.role-settings-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.role-settings-heading strong { font-size: 1rem; }
+.role-settings-heading p,
+.role-preview-description {
+  margin: 5px 0 0;
+  color: var(--text-soft);
+  font-size: .82rem;
+  line-height: 1.7;
+}
+.role-current-pill {
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+  font-size: .78rem;
+  font-weight: 800;
+}
+.role-settings-panel .set-row { background: var(--card); }
+.role-preview-description {
+  padding: 8px 10px;
+  border-right: 3px solid var(--primary);
+  background: var(--primary-soft);
+  border-radius: 8px;
+}
+.role-permission-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 7px;
+  margin-top: 10px;
+}
+.role-permission-list span {
+  padding: 8px 9px;
+  border: 1px solid var(--border-light);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--text);
+  font-size: .78rem;
+  line-height: 1.5;
+}
+@media (max-width: 520px) {
+  .role-settings-panel { padding: 11px; }
+  .role-permission-list { grid-template-columns: 1fr; }
+}
+
+.local-auth-gate { position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; padding: 20px; background: rgba(4, 25, 21, .88); backdrop-filter: blur(7px); }
+.local-auth-card { width: min(100%, 420px); display: grid; gap: 12px; padding: 24px; border: 1px solid var(--border); border-radius: 20px; background: var(--card); color: var(--text); box-shadow: 0 20px 70px rgba(0,0,0,.3); }
+.local-auth-mark { color: var(--primary); font-weight: 900; font-size: 1.1rem; }
+.local-auth-card h2 { font-size: 1.35rem; }
+.local-auth-card p, .local-auth-card small { color: var(--text-soft); font-size: .85rem; }
+.local-auth-card label { display: grid; gap: 5px; font-weight: 700; font-size: .9rem; }
+.local-auth-card input { width: 100%; min-height: 44px; padding: 9px 11px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); color: var(--text); direction: ltr; text-align: left; }
+.local-auth-error { color: var(--danger) !important; min-height: 1.2em; }
+.local-auth-lock { position: fixed; z-index: 80; bottom: calc(var(--nav-h) + var(--safe-b) + 14px); left: 12px; box-shadow: var(--shadow); }
+.local-users-panel { margin-top: 14px; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); }
+.local-users-panel h3 { margin-bottom: 5px; }
+.local-users-panel p { color: var(--text-soft); font-size: .8rem; margin-bottom: 8px; }
+.local-user-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border-light); font-size: .82rem; }
+.local-user-row span { overflow-wrap: anywhere; }
+
+/* Accounting workspace: compact icon navigation and focused panels */
+.accounting-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+  gap: 8px;
+  margin: 10px 0 14px;
+  padding: 8px;
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  background: var(--bg);
+}
+.accounting-shortcut {
+  display: flex;
+  min-height: 68px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 6px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-soft);
+  font: inherit;
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.accounting-shortcut:hover { background: var(--card); border-color: var(--border); color: var(--text); }
+.accounting-shortcut.is-active { background: var(--card); border-color: var(--primary); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+.accounting-shortcut-icon { display: grid; width: 28px; height: 28px; place-items: center; font-size: 1.25rem; line-height: 1; color: currentColor; }
+.acc-section[hidden], #accountingCommerceWorkspace[hidden], #accountingReportsWorkspace[hidden] { display: none !important; }
+.accounting-inner-card { margin-top: 0 !important; }
+.accounting-overview-hint { margin: 12px 2px 4px; }
+@media (max-width: 520px) {
+  .accounting-shortcuts { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; padding: 6px; }
+  .accounting-shortcut { min-height: 62px; font-size: .7rem; }
+}
+
+.commerce-invoice-card .commerce-lines-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:18px 0 8px;padding-bottom:8px;border-bottom:1px solid var(--border-color,#d8dee8)}
+.commerce-invoice-card .commerce-line{grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin:8px 0}
+.commerce-invoice-card .commerce-line [readonly]:not([data-line-total]){background:var(--surface-muted,#f4f6f8);font-weight:600;color:var(--text,#1f2937)}
+.commerce-invoice-card .commerce-line [data-line-total],
+#accountingCommerceWorkspace .commerce-line [data-line-total],
+#invoiceItemsSheet .commerce-line [data-line-total]{
+  font-weight:800!important;
+  color:#0f172a!important;
+  background:#e0f2fe!important;
+  border:1px solid #7dd3fc!important;
+  letter-spacing:.02em;
+}
+[data-theme='dark'] .commerce-invoice-card .commerce-line [data-line-total],
+[data-theme='dark'] #accountingCommerceWorkspace .commerce-line [data-line-total],
+[data-theme='dark'] #invoiceItemsSheet .commerce-line [data-line-total]{
+  color:#f8fafc!important;
+  background:#0c4a6e!important;
+  border-color:#38bdf8!important;
+}
+.commerce-invoice-summary{max-width:520px;margin:14px 0 14px auto;padding:12px;border:1px solid var(--border-color,#d8dee8);border-radius:10px}
+.commerce-invoice-summary>div{display:flex;justify-content:space-between;gap:12px;padding:7px 2px;border-bottom:1px solid var(--border-color,#e5e7eb)}
+.commerce-invoice-summary>div:last-child{border-bottom:0}
+.commerce-invoice-summary .grand{font-size:1.08em;font-weight:800}
+.invoice-internal-profit{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px 16px;padding:8px 10px;margin-top:4px;border-radius:8px;background:var(--primary-soft,#e5f3e8);border:1px dashed var(--border,#b9ddc2);font-size:0.88rem;color:var(--text-soft,#617d70)}
+.invoice-internal-profit b{color:var(--primary-dark,#075c4d)}
+.invoice-internal-profit-panel{max-width:520px}
+@media(max-width:640px){.commerce-invoice-card .commerce-lines-head{align-items:flex-start;flex-direction:column}.commerce-invoice-summary{max-width:none}}
+
+/* —— فرم افزودن/ویرایش کاربر: نقش پایه + مجوزها —— */
+.local-user-editor-card{
+  width:min(720px,96vw);
+  max-height:92vh;
+  overflow:auto;
+  gap:14px;
+  padding:20px 18px 18px;
+}
+.local-user-editor-fields{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px 14px;
+}
+.local-user-editor-card .local-field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-weight:700;
+  font-size:.88rem;
+  margin:0;
+}
+.local-user-editor-card .local-field input,
+.local-user-editor-card .local-role-select{
+  width:100%;
+  min-height:46px;
+  padding:10px 12px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--bg);
+  color:var(--text);
+  font-size:.95rem;
+  box-sizing:border-box;
+}
+.local-user-editor-card .local-field input{
+  direction:ltr;
+  text-align:left;
+}
+.local-field-role{grid-column:1 / -1}
+.local-field-label{display:block}
+.local-role-select{
+  appearance:none;
+  -webkit-appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--text-soft) 50%),linear-gradient(135deg,var(--text-soft) 50%,transparent 50%);
+  background-position:calc(100% - 18px) calc(50% - 3px),calc(100% - 12px) calc(50% - 3px);
+  background-size:6px 6px,6px 6px;
+  background-repeat:no-repeat;
+  padding-inline-end:32px;
+  cursor:pointer;
+  font-weight:600;
+}
+.local-field-hint{
+  display:block;
+  font-weight:500;
+  font-size:.78rem;
+  color:var(--text-soft);
+  line-height:1.45;
+  margin-top:2px;
+}
+.local-permission-section{
+  margin-top:4px;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--primary-soft);
+}
+.local-permission-head h3{
+  margin:0 0 4px;
+  font-size:1rem;
+  font-weight:800;
+  color:var(--primary-dark);
+  border:0;
+  padding:0;
+}
+.local-permission-head p{
+  margin:0 0 10px;
+  font-size:.8rem;
+  color:var(--text-soft);
+  line-height:1.45;
+}
+.local-permission-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));
+  gap:8px;
+  max-height:38vh;
+  overflow:auto;
+  padding:4px 2px 2px;
+  margin:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+.local-permission-option{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  min-height:44px;
+  padding:10px 12px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--card);
+  font-size:.84rem;
+  font-weight:600;
+  line-height:1.35;
+  cursor:pointer;
+  transition:border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  user-select:none;
+}
+.local-permission-option:hover{
+  border-color:var(--primary);
+  box-shadow:var(--shadow-sm);
+}
+.local-permission-option.is-on{
+  border-color:var(--primary);
+  background:linear-gradient(180deg,var(--card) 0%,var(--primary-soft) 160%);
+  box-shadow:inset 0 0 0 1px rgba(8,115,79,.12);
+}
+.local-permission-option input{
+  position:absolute;
+  opacity:0;
+  width:1px;
+  height:1px;
+  pointer-events:none;
+}
+.local-permission-check{
+  flex:0 0 auto;
+  width:20px;
+  height:20px;
+  margin-top:1px;
+  border:2px solid var(--border);
+  border-radius:6px;
+  background:var(--bg);
+  position:relative;
+  transition:background .15s ease, border-color .15s ease;
+}
+.local-permission-option.is-on .local-permission-check{
+  background:var(--primary);
+  border-color:var(--primary);
+}
+.local-permission-option.is-on .local-permission-check::after{
+  content:"";
+  position:absolute;
+  left:6px;
+  top:2px;
+  width:5px;
+  height:10px;
+  border:solid #fff;
+  border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+}
+.local-permission-text{
+  flex:1 1 auto;
+  min-width:0;
+}
+.local-user-editor-actions{
+  display:flex;
+  gap:10px;
+  margin-top:4px;
+}
+.local-user-editor-actions button{
+  flex:1;
+  min-height:46px;
+  border-radius:12px;
+}
+@media (max-width:520px){
+  .local-user-editor-card{padding:16px 14px}
+  .local-user-editor-fields{grid-template-columns:1fr}
+  .local-permission-grid{grid-template-columns:1fr;max-height:34vh}
+  .local-permission-option{min-height:48px}
+}
+.local-users-panel small{display:block;margin-top:10px;color:var(--muted,#777);line-height:1.7}
+
+.health-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+.health-summary>div{display:flex;flex-direction:column;gap:3px;padding:12px;border:1px solid var(--border-light);border-radius:10px;background:var(--bg-soft,var(--card))}
+.health-summary b{font-size:1.35rem}.health-summary span{font-size:.78rem;color:var(--text-soft)}
+.health-finding{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 12px;margin:8px 0;border:1px solid var(--border-light);border-right:4px solid var(--border-light);border-radius:9px;background:var(--card)}
+.health-finding p{margin:4px 0 0;font-size:.8rem;color:var(--text-soft)}.health-finding strong{font-size:1.1rem}
+.health-error{border-right-color:#c33}.health-warning{border-right-color:#c58a20}.health-ok{border-right-color:#32966b}
+@media(max-width:520px){.health-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.health-finding{align-items:flex-start}}
+
+#accountingCommerceWorkspace .commerce-section-nav{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 18px;padding:8px;background:var(--surface-muted,#f5f7fa);border:1px solid var(--border-color,#d8dee8);border-radius:14px}
+#accountingCommerceWorkspace .commerce-section-nav .btn{min-width:132px;justify-content:center;border-radius:10px}
+#accountingCommerceWorkspace .commerce-page-header{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:4px 0 16px;padding:18px 20px;border:1px solid var(--border-color,#d8dee8);border-radius:16px;background:linear-gradient(135deg,var(--surface,#fff),var(--surface-muted,#f5f7fa))}
+#accountingCommerceWorkspace .commerce-page-header h2{margin:0 0 5px;font-size:1.35rem}
+#accountingCommerceWorkspace .commerce-page-header p{margin:0;color:var(--text-muted,#667085);font-size:.9rem}
+#accountingCommerceWorkspace .commerce-page-chip{padding:7px 14px;border-radius:999px;background:var(--surface-muted,#edf2f7);border:1px solid var(--border-color,#d8dee8);font-weight:700;white-space:nowrap}
+#accountingCommerceWorkspace .commerce-invoice-card{padding:18px;border-radius:16px}
+#accountingCommerceWorkspace .commerce-invoice-card>h3{margin-top:0;padding-bottom:12px;border-bottom:1px solid var(--border-color,#d8dee8)}
+#accountingCommerceWorkspace .commerce-invoice-card .form-grid{gap:14px}
+#accountingCommerceWorkspace .commerce-invoice-card .field input,#accountingCommerceWorkspace .commerce-invoice-card .field select,#accountingCommerceWorkspace .commerce-invoice-card .field textarea{min-height:42px;border-radius:9px}
+#accountingCommerceWorkspace .commerce-invoice-card .data-table th{white-space:nowrap}
+
+#accountingCommerceWorkspace .commerce-line input[data-line-desc][readonly],
+#invoiceItemsSheet .commerce-line input[data-line-desc][readonly]{
+  background:var(--surface-muted,#f5f7fa);
+  color:var(--text-muted,#555);
+  cursor:default;
+}
+
+@media(max-width:640px){#accountingCommerceWorkspace .commerce-page-header{align-items:flex-start;padding:14px}#accountingCommerceWorkspace .commerce-section-nav .btn{flex:1;min-width:0}}
+
+
+#accountingCommerceWorkspace .invoice-product-tools{display:grid;grid-template-columns:minmax(180px,2fr) auto minmax(160px,1.5fr) auto auto;gap:10px;align-items:end;margin:12px 0 16px;padding:12px;border:1px solid var(--border-color,#d8dee8);border-radius:12px;background:var(--surface-muted,#f7f8fa)}
+#accountingCommerceWorkspace .invoice-product-tools .field{margin:0;min-width:0}
+#accountingCommerceWorkspace .invoice-product-tools .btn{min-height:42px;white-space:nowrap}
+#accountingCommerceWorkspace .invoice-calendar-field{display:flex;flex-direction:column;gap:6px;min-width:0}
+#accountingCommerceWorkspace .invoice-calendar-field input{min-height:42px}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line{display:grid;grid-template-columns:minmax(150px,1.3fr) minmax(150px,1.4fr) repeat(4,minmax(100px,.8fr)) minmax(110px,.9fr) auto;gap:9px;align-items:end;border:1px solid var(--border-color,#e0e4ea)!important;border-radius:10px;padding:12px!important;margin:9px 0!important;background:var(--surface,#fff)}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line .field{min-width:0}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line [data-line-total]{font-weight:800}
+@media(max-width:900px){#accountingCommerceWorkspace .invoice-product-tools{grid-template-columns:1fr 1fr}#accountingCommerceWorkspace .commerce-invoice-card .commerce-line{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){#accountingCommerceWorkspace .invoice-product-tools{grid-template-columns:1fr}#accountingCommerceWorkspace .commerce-invoice-card .commerce-line{grid-template-columns:1fr 1fr}#accountingCommerceWorkspace .invoice-calendar-field{grid-column:auto}}
+
+
+/* دسته‌بندی‌های جمع‌وجور تنظیمات و گزارش‌ها */
+.settings-category, .report-category {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--card, var(--surface, var(--bg)));
+  margin: 10px 0;
+  overflow: hidden;
+}
+.category-summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 58px;
+  padding: 10px 13px;
+  cursor: pointer;
+  font-weight: 800;
+  color: var(--text);
+  user-select: none;
+}
+.category-summary::-webkit-details-marker { display: none; }
+.category-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  border-radius: 12px;
+  background: var(--bg);
+  font-size: 1.2rem;
+}
+.category-title { flex: 1; }
+.category-chevron {
+  color: var(--text-soft);
+  font-size: 1.15rem;
+  transition: transform .18s ease;
+}
+details[open] > .category-summary .category-chevron { transform: rotate(180deg); }
+.category-content {
+  padding: 0 12px 13px;
+  border-top: 1px solid var(--border);
+}
+.settings-category:not([open]) .category-content,
+.report-category:not([open]) .category-content { display: none; }
+#page-admin > .settings-category:first-of-type { margin-top: 0; }
+#page-reports > .card > .report-category { margin-top: 12px; }
+@media (max-width: 480px) {
+  .category-summary { min-height: 54px; padding: 8px 10px; }
+  .category-icon { width: 35px; height: 35px; flex-basis: 35px; }
+  .category-content { padding-inline: 9px; }
+}
+
+.commerce-invoice-card .invoice-payment-row { grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); }
+.commerce-invoice-card .invoice-payment-row [data-pay-remove] { align-self: end; }
+
+#accountingCommerceWorkspace .invoice-product-tools,
+#commercePanelSheet .invoice-product-tools,
+#invoiceItemsSheet .invoice-product-tools{grid-template-columns:minmax(220px,1.4fr) auto minmax(300px,1.8fr);gap:8px;padding:9px;margin:9px 0 12px}
+#accountingCommerceWorkspace .invoice-live-search,
+#commercePanelSheet .invoice-live-search,
+#invoiceItemsSheet .invoice-live-search{position:relative;min-width:0;z-index:5}
+#accountingCommerceWorkspace .invoice-live-search .field,
+#commercePanelSheet .invoice-live-search .field,
+#invoiceItemsSheet .invoice-live-search .field{margin:0}
+#accountingCommerceWorkspace .invoice-product-suggestions,
+#commercePanelSheet .invoice-product-suggestions,
+#invoiceItemsSheet .invoice-product-suggestions{
+  position:absolute;z-index:200;top:100%;right:0;left:0;max-height:280px;overflow:auto;
+  background:var(--surface,#fff);border:1px solid var(--border-color,#ccd3dd);
+  border-radius:0 0 10px 10px;box-shadow:0 8px 22px rgba(0,0,0,.18);text-align:right
+}
+#accountingCommerceWorkspace .invoice-product-suggestion,
+#commercePanelSheet .invoice-product-suggestion,
+#invoiceItemsSheet .invoice-product-suggestion{
+  display:flex;width:100%;justify-content:space-between;align-items:center;gap:10px;
+  text-align:right;padding:8px 10px;border:0;border-bottom:1px solid var(--border-color,#e4e7eb);
+  background:transparent;color:inherit;cursor:pointer
+}
+#accountingCommerceWorkspace .invoice-product-suggestion.active,
+#accountingCommerceWorkspace .invoice-product-suggestion:hover,
+#commercePanelSheet .invoice-product-suggestion.active,
+#commercePanelSheet .invoice-product-suggestion:hover,
+#invoiceItemsSheet .invoice-product-suggestion.active,
+#invoiceItemsSheet .invoice-product-suggestion:hover{background:var(--surface-muted,#eef3f8)}
+#accountingCommerceWorkspace .invoice-product-suggestion span:first-child,
+#commercePanelSheet .invoice-product-suggestion span:first-child,
+#invoiceItemsSheet .invoice-product-suggestion span:first-child{display:flex;flex-direction:column;min-width:0}
+#accountingCommerceWorkspace .invoice-product-suggestion small,
+#commercePanelSheet .invoice-product-suggestion small,
+#invoiceItemsSheet .invoice-product-suggestion small,
+.suggestion-stock{font-size:11px;opacity:.75}
+#accountingCommerceWorkspace .invoice-barcode-entry{display:grid;grid-template-columns:minmax(120px,1fr) auto auto;gap:7px;align-items:end;min-width:0}
+#accountingCommerceWorkspace .invoice-barcode-entry .field{margin:0;min-width:0}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line{grid-template-columns:minmax(130px,1.2fr) minmax(130px,1.2fr) minmax(65px,.55fr) minmax(85px,.65fr) minmax(70px,.55fr) minmax(110px,.8fr) minmax(100px,.75fr) minmax(110px,.8fr) auto;gap:6px;padding:7px!important;margin:5px 0!important;border-radius:8px}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line .field{font-size:12px;gap:3px}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line input,#accountingCommerceWorkspace .commerce-invoice-card .commerce-line select{min-height:34px;padding:5px 7px;font-size:12px}
+#accountingCommerceWorkspace .invoice-line-stock{display:block;min-height:34px;padding:7px 6px;border-radius:6px;background:var(--surface-muted,#f3f5f7);font-size:12px;font-weight:700}
+@media(max-width:1000px){#accountingCommerceWorkspace .invoice-product-tools{grid-template-columns:minmax(0,1fr) auto}#accountingCommerceWorkspace .invoice-barcode-entry{grid-column:1/-1}#accountingCommerceWorkspace .commerce-invoice-card .commerce-line{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:560px){#accountingCommerceWorkspace .invoice-product-tools{grid-template-columns:1fr}#accountingCommerceWorkspace .invoice-barcode-entry{grid-template-columns:minmax(0,1fr) auto}#accountingCommerceWorkspace .invoice-barcode-entry #invoiceScanOpen{grid-column:1/-1;width:100%}#accountingCommerceWorkspace .commerce-invoice-card .commerce-line{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:7px!important}#accountingCommerceWorkspace .commerce-invoice-card .commerce-line [data-line-desc]{grid-column:span 2}#accountingCommerceWorkspace .commerce-invoice-card .commerce-line [data-remove-line]{grid-column:span 2;width:100%}}
+
+
+#accountingCommerceWorkspace #invoiceScanStatus{display:block;min-height:1.4em;margin-top:4px;color:var(--muted,#64748b);font-size:.82rem}
+#accountingCommerceWorkspace #invoiceBarcodeInput:focus{outline:2px solid var(--primary,#2563eb);outline-offset:1px}
+
+
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line{
+  display:grid;
+  grid-template-columns:minmax(170px,2fr) minmax(68px,.62fr) minmax(105px,1.12fr) minmax(96px,1fr);
+  gap:6px 8px;align-items:end;
+}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-product]){grid-column:1;grid-row:1}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-qty]){grid-column:2;grid-row:1}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-price]){grid-column:3;grid-row:1}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-discount]){grid-column:4;grid-row:1}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-desc]){grid-column:1/span 2;grid-row:2}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-unit]){grid-column:3;grid-row:2}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-stock]){grid-column:4;grid-row:2}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-total]){grid-column:1/span 3;grid-row:3}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line>[data-remove-line]{grid-column:4;grid-row:3;min-height:34px}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label{min-width:0;margin:0}
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line input,
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line select{min-width:0;width:100%;box-sizing:border-box;min-height:34px;padding:5px 7px;font-size:12px}
+@media(max-width:560px){
+ #accountingCommerceWorkspace .commerce-invoice-card .commerce-line{grid-template-columns:minmax(0,1.8fr) minmax(54px,.62fr) minmax(84px,1fr) minmax(78px,.9fr);gap:6px 5px;padding:7px!important}
+ #accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-product]){grid-column:1;grid-row:1}
+ #accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-qty]){grid-column:2;grid-row:1}
+ #accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-price]){grid-column:3;grid-row:1}
+ #accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-discount]){grid-column:4;grid-row:1}
+ #accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-desc]){grid-column:1/span 2;grid-row:2}
+ #accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-unit]){grid-column:3;grid-row:2}
+ #accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-stock]){grid-column:4;grid-row:2}
+ #accountingCommerceWorkspace .commerce-invoice-card .commerce-line>label:has([data-line-total]){grid-column:1/span 3;grid-row:3}
+ #accountingCommerceWorkspace .commerce-invoice-card .commerce-line>[data-remove-line]{grid-column:4;grid-row:3;width:100%}
+}
+
+/* تقویم مشترک تاریخ شمسی؛ مقدار اصلی همچنان شمسی ذخیره می‌شود. */
+.jalali-calendar-wrap{display:inline-flex;align-items:center;vertical-align:middle;margin-inline-start:6px;position:relative;min-width:38px;height:36px;}
+.jalali-calendar-native{width:38px!important;min-width:38px;height:36px;padding:4px!important;border:1px solid var(--border-color,#cbd5e1)!important;border-radius:8px;background:var(--card-bg,#fff);cursor:pointer;color:transparent;font-size:0;}
+.jalali-calendar-native::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.9;margin:0;width:20px;height:20px;}
+.jalali-calendar-native:focus{outline:2px solid var(--primary,#2563eb);outline-offset:1px;}
+
+/* فرم ساده و جمع‌وجور فاکتور، نزدیک به الگوی موبایلی درخواستی */
+#accountingCommerceWorkspace .commerce-invoice-card{max-width:920px;margin-inline:auto;padding:clamp(12px,2.5vw,22px)}
+#accountingCommerceWorkspace .commerce-invoice-card>.form-grid:first-of-type{display:grid;grid-template-columns:1fr;gap:8px;margin:10px 0 16px}
+#accountingCommerceWorkspace .commerce-invoice-card>.form-grid:first-of-type>.field{display:grid;grid-template-columns:minmax(105px,28%) minmax(0,1fr);align-items:center;gap:10px;border-bottom:1px solid var(--border-color,#888);padding:8px 0;margin:0}
+#accountingCommerceWorkspace .commerce-invoice-card>.form-grid:first-of-type input:not([type=hidden]),#accountingCommerceWorkspace .commerce-invoice-card>.form-grid:first-of-type select{border:0;border-bottom:1px solid var(--border-color,#888);border-radius:0;background:transparent;min-height:42px;box-shadow:none}
+#accountingCommerceWorkspace .commerce-invoice-card>.card{box-shadow:none}
+#accountingCommerceWorkspace #invoiceOpenItems,#accountingCommerceWorkspace #invoiceSettle{min-width:118px;min-height:42px}
+#accountingCommerceWorkspace .commerce-invoice-card>details>summary{cursor:pointer;padding:12px;border-bottom:1px solid var(--border-color,#ddd);font-weight:600}
+#accountingCommerceWorkspace .commerce-invoice-summary{margin:14px 0;padding:12px;border:1px solid var(--border-color,#ddd);border-radius:10px}
+@media(max-width:560px){#accountingCommerceWorkspace .commerce-invoice-card>.form-grid:first-of-type>.field{grid-template-columns:110px minmax(0,1fr)}#accountingCommerceWorkspace .commerce-invoice-card{padding:10px}}
+
+/* Accounting home: spacious two-column icon menu inspired by the supplied mobile reference. */
+.accounting-home-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 10px;
+  padding: 8px 2px 14px;
+  direction: rtl;
+}
+.accounting-home-tile {
+  min-width: 0;
+  min-height: 116px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 7px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: .96rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.accounting-home-tile:hover, .accounting-home-tile:focus-visible {
+  background: var(--surface-muted, #f7f8fa);
+  border-color: var(--border);
+  outline: none;
+}
+.accounting-home-tile:active { transform: scale(.98); }
+.accounting-home-icon {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  font-size: 2.15rem;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--primary);
+}
+.accounting-home-icon.people,.accounting-home-icon.income { color: #2f9f59; }
+.accounting-home-icon.party,.accounting-home-icon.reports { color: #efa52b; }
+.accounting-home-icon.inventory,.accounting-home-icon.banking { color: #607d8b; }
+.accounting-home-icon.invoice,.accounting-home-icon.accounts { color: #455a64; }
+.accounting-home-icon.receipt,.accounting-home-icon.cheques { color: #229653; }
+.accounting-home-icon.payment,.accounting-home-icon.expense { color: #c43b35; }
+.accounting-home-icon.other,.accounting-home-icon.messages { color: #e5a02c; }
+.accounting-home-icon.journals,.accounting-home-icon.fiscal { color: #258b4d; }
+.accounting-home-stats { margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--border); }
+@media (min-width: 720px) {
+  .accounting-home-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .accounting-home-tile { min-height: 128px; font-size: 1rem; }
+}
+
+/* برگه تمام‌صفحه ماژول‌های حسابداری و بازرگانی */
+body.accounting-sheet-open { overflow: hidden; }
+.accounting-module-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  background: var(--bg, #f5f7fb);
+  color: var(--text, #172033);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.accounting-module-sheet-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(12px, 3vw, 28px) clamp(12px, 3vw, 24px) 40px;
+  min-height: 100%;
+  box-sizing: border-box;
+}
+.accounting-module-sheet-head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+  padding: 12px 0 14px;
+  background: linear-gradient(180deg, var(--bg, #f5f7fb) 70%, transparent);
+  border-bottom: 1px solid var(--border, #e2e8f0);
+}
+.accounting-module-sheet-kicker {
+  margin: 0 0 4px;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--text-soft, #667085);
+  letter-spacing: .02em;
+}
+.accounting-module-sheet-head h2 {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+}
+.accounting-module-sheet-body {
+  padding-bottom: 24px;
+}
+.commerce-home { margin-top: 4px; }
+.commerce-home .accounting-home-grid { margin-top: 12px; }
+#accountingCommerceWorkspace[hidden],
+#accountingReportsWorkspace[hidden],
+#accountingModuleHost[hidden] { display: none !important; }
+
+/* سند حسابداری چندردیفی */
+.accounting-voucher-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:14px 0 8px}
+.accounting-voucher-lines{display:grid;gap:10px}
+.accounting-voucher-line{display:grid;grid-template-columns:minmax(150px,1.2fr) minmax(130px,1fr) minmax(110px,.8fr) minmax(110px,.8fr) auto;gap:8px;align-items:end;padding:10px;border:1px solid var(--border-color, #ddd);border-radius:12px;background:var(--surface-subtle, rgba(127,127,127,.04))}
+.accounting-voucher-line .field{margin:0;min-width:0}
+.accounting-voucher-line [data-je-remove]{white-space:nowrap}
+@media(max-width:760px){.accounting-voucher-line{grid-template-columns:1fr 1fr}.accounting-voucher-line .field:first-child,.accounting-voucher-line .field:nth-child(2){grid-column:span 2}.accounting-voucher-line [data-je-remove]{grid-column:span 2}}
+
+/* انتخاب تاریخ صدور با تقویم شمسی */
+/* jalali calendar base styles moved to unified fixed-panel block */
+
+
+/* Invoice item selection: RTL-first cards using the app's green brand palette. */
+#invoiceItemsSheet,
+#invoiceItemsSheet * {
+  direction: rtl;
+  text-align: right;
+}
+#invoiceItemsSheet .commerce-lines-head,
+#invoiceItemsSheet .invoice-product-tools {
+  background: var(--primary-soft);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin: 12px 0;
+}
+#invoiceItemsSheet .invoice-product-tools {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.3fr) auto minmax(260px, 1fr);
+  gap: 12px;
+  align-items: end;
+}
+#invoiceItemsSheet .invoice-product-tools .field,
+#invoiceItemsSheet .commerce-line .field {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  min-width: 0;
+  color: var(--text);
+  font-weight: 700;
+}
+#invoiceItemsSheet input,
+#invoiceItemsSheet select,
+#invoiceItemsSheet textarea {
+  width: 100%;
+  min-width: 0;
+  text-align: right;
+  direction: rtl;
+  border-color: var(--border);
+  background: var(--card);
+  color: var(--text);
+}
+#invoiceItemsSheet input::placeholder { text-align: right; color: var(--text-soft); }
+#invoiceItemsSheet .invoice-line-card {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  align-items: end;
+  padding: 14px;
+  margin: 12px 0;
+  border: 1px solid var(--border);
+  border-inline-start: 4px solid var(--primary);
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+#invoiceItemsSheet .invoice-line-heading {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--primary-deeper);
+  font-weight: 800;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--border-light);
+}
+[data-theme='dark'] #invoiceItemsSheet .invoice-line-heading { color: var(--text); }
+#invoiceItemsSheet .invoice-line-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 62px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary-deeper);
+  font-size: .78rem;
+}
+[data-theme='dark'] #invoiceItemsSheet .invoice-line-number { color: var(--text); }
+#invoiceItemsSheet .invoice-field-help {
+  color: var(--text-soft);
+  font-size: .72rem;
+  font-weight: 400;
+}
+#invoiceItemsSheet .invoice-stock-field output {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg2);
+}
+#invoiceItemsSheet .invoice-line-total-field input {
+  font-weight: 800;
+  color: #0f172a !important;
+  background: #e0f2fe !important;
+  border: 1px solid #7dd3fc !important;
+  letter-spacing: 0.02em;
+}
+[data-theme='dark'] #invoiceItemsSheet .invoice-line-total-field input {
+  color: #f8fafc !important;
+  background: #0c4a6e !important;
+  border-color: #38bdf8 !important;
+}
+#invoiceItemsSheet .invoice-line-remove {
+  justify-self: start;
+}
+#invoiceItemsSheet .invoice-product-suggestions { text-align: right; }
+#invoiceItemsSheet .invoice-barcode-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 8px;
+  align-items: end;
+}
+#invoiceItemsSheet #invoiceScanStatus {
+  grid-column: 1 / -1;
+  text-align: right;
+}
+@media (max-width: 760px) {
+  #invoiceItemsSheet .invoice-product-tools { grid-template-columns: 1fr; }
+  #invoiceItemsSheet .invoice-line-card { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #invoiceItemsSheet .invoice-line-heading { grid-column: 1 / -1; }
+  #invoiceItemsSheet .invoice-barcode-entry { grid-template-columns: 1fr 1fr; }
+  #invoiceItemsSheet .invoice-barcode-entry .field { grid-column: 1 / -1; }
+}
+@media (max-width: 420px) {
+  #invoiceItemsSheet .invoice-line-card { grid-template-columns: 1fr; }
+}
+
+#accountingCommerceWorkspace .invoice-product-tools-compact{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  gap:10px;
+  align-items:end;
+}
+#accountingCommerceWorkspace .invoice-product-tools-compact .invoice-live-search{min-width:0}
+#accountingCommerceWorkspace .invoice-product-tools-compact #invoiceScanStatus{grid-column:1/-1;min-height:1.2em}
+#accountingCommerceWorkspace .invoice-line-product-name,
+#invoiceItemsSheet .invoice-line-product-name{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding:8px 10px;border-radius:8px;background:var(--surface-muted,#f5f7fa);
+  border:1px solid var(--border-color,#e0e4ea);margin:0;
+}
+#accountingCommerceWorkspace .invoice-product-badge,
+#invoiceItemsSheet .invoice-product-badge{
+  font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;
+  background:var(--primary,#2563eb);color:#fff;
+}
+@media(max-width:560px){
+  #accountingCommerceWorkspace .invoice-product-tools-compact{grid-template-columns:1fr}
+  #accountingCommerceWorkspace .invoice-product-tools-compact .btn{width:100%}
+}
+
+/* —— Invoice line cards: neat & readable —— */
+#accountingCommerceWorkspace .commerce-line.invoice-line-card,
+#invoiceItemsSheet .commerce-line.invoice-line-card{
+  border:1px solid var(--border-color,#d8dee8)!important;
+  border-inline-start:4px solid var(--primary,#2563eb)!important;
+  border-radius:12px!important;
+  padding:14px!important;
+  margin:10px 0!important;
+  background:var(--surface,#fff)!important;
+  box-shadow:0 1px 3px rgba(15,23,42,.06);
+}
+#accountingCommerceWorkspace .invoice-line-heading,
+#invoiceItemsSheet .invoice-line-heading{
+  grid-column:1/-1;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:800;
+  color:var(--text,#0f172a);
+  padding-bottom:8px;
+  margin-bottom:2px;
+  border-bottom:1px solid var(--border-light);
+}
+#accountingCommerceWorkspace .invoice-line-number,
+#invoiceItemsSheet .invoice-line-number{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:56px;
+  padding:3px 10px;
+  border-radius:999px;
+  background:#dbeafe;
+  color:#1e3a8a;
+  font-size:.78rem;
+  font-weight:800;
+}
+[data-theme='dark'] #accountingCommerceWorkspace .invoice-line-number,
+[data-theme='dark'] #invoiceItemsSheet .invoice-line-number{
+  background:#1e3a8a;
+  color:#e0f2fe;
+}
+#accountingCommerceWorkspace .invoice-line-product-name,
+#invoiceItemsSheet .invoice-line-product-name{
+  grid-column:1/-1;
+}
+#accountingCommerceWorkspace .invoice-product-tools-compact,
+#invoiceItemsSheet .invoice-product-tools{
+  padding:12px;
+  border:1px solid var(--border-color,#d8dee8);
+  border-radius:12px;
+  background:var(--primary-soft);
+  margin:8px 0 12px;
+}
+#accountingCommerceWorkspace .commerce-lines-head,
+#invoiceItemsSheet .commerce-lines-head{
+  margin-top:4px;
+}
+#accountingCommerceWorkspace .invoice-line-total-field,
+#invoiceItemsSheet .invoice-line-total-field{
+  font-weight:700;
+}
+
+#accountingCommerceWorkspace .invoice-details-panel{padding:14px 16px;border-radius:12px}
+#accountingCommerceWorkspace .invoice-details-panel>summary{font-weight:750;cursor:pointer}
+#accountingCommerceWorkspace .invoice-details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}
+#accountingCommerceWorkspace .invoice-details-grid .field:has(textarea){grid-column:1/-1}
+@media(max-width:560px){#accountingCommerceWorkspace .invoice-details-grid{grid-template-columns:1fr}}
+
+/* —— Invoice form polish —— */
+#accountingCommerceWorkspace .commerce-invoice-card{
+  padding:18px 18px 14px;
+  border:1px solid var(--border-color,#d8dee8);
+  border-radius:16px;
+  background:var(--surface,#fff);
+  box-shadow:0 1px 4px rgba(15,23,42,.05);
+}
+#accountingCommerceWorkspace .commerce-invoice-card>h3{
+  margin:0 0 14px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--border-light);
+  font-size:1.15rem;
+}
+#accountingCommerceWorkspace .invoice-header-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px 14px;
+  margin-bottom:16px;
+}
+@media(max-width:700px){
+  #accountingCommerceWorkspace .invoice-header-grid{grid-template-columns:1fr}
+}
+#accountingCommerceWorkspace .invoice-items-block{
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:var(--primary-soft);
+  margin:4px 0 12px;
+}
+#accountingCommerceWorkspace .invoice-items-block .commerce-lines-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:0 0 10px;
+  padding:0;
+  border:0;
+}
+#accountingCommerceWorkspace .invoice-action-bar{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:14px 0 16px;
+}
+#accountingCommerceWorkspace .commerce-invoice-summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin:14px 0 4px;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--primary-soft);
+}
+#accountingCommerceWorkspace .commerce-invoice-summary>div{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+#accountingCommerceWorkspace .commerce-invoice-summary .grand b{
+  font-size:1.1rem;
+  color:#0f172a;
+}
+[data-theme='dark'] #accountingCommerceWorkspace .commerce-invoice-summary .grand b{color:#f8fafc}
+@media(max-width:560px){
+  #accountingCommerceWorkspace .commerce-invoice-summary{grid-template-columns:1fr}
+}
+
+#accountingCommerceWorkspace .invoice-items-toolbar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;
+}
+#accountingCommerceWorkspace .invoice-items-toolbar b{font-size:1rem}
+
+.accounting-home-links{
+  display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;
+}
+.accounting-home-stats{margin-top:4px}
+
+
+/* ========== Accounting: RTL + polished cards ========== */
+#accountingWorkspace{
+  direction:rtl;
+  text-align:right;
+}
+#accountingWorkspace .accounting-shortcuts{
+  direction:rtl;
+  text-align:right;
+  gap:8px;
+  padding:8px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:var(--primary-soft);
+}
+#accountingWorkspace .accounting-shortcut{
+  border-radius:12px;
+  min-height:68px;
+  font-weight:700;
+}
+#accountingWorkspace .acc-section,
+#accountingCommerceWorkspace,
+#accountingReportsWorkspace{
+  direction:rtl;
+  text-align:right;
+}
+#accountingWorkspace .card,
+#accountingWorkspace .accounting-inner-card,
+#accountingCommerceWorkspace .card,
+#accountingReportsWorkspace .card{
+  direction:rtl;
+  text-align:right;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:16px 18px;
+  background:var(--surface,#fff);
+  box-shadow:0 1px 3px rgba(15,23,42,.05);
+  margin-top:12px;
+}
+#accountingWorkspace .card h3,
+#accountingWorkspace .accounting-inner-card h3,
+#accountingCommerceWorkspace .card h3,
+#accountingReportsWorkspace .card h3{
+  margin:0 0 12px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--border-light);
+  font-size:1.05rem;
+  font-weight:800;
+  text-align:right;
+}
+#accountingWorkspace .form-grid,
+#accountingCommerceWorkspace .form-grid,
+#accountingReportsWorkspace .form-grid{
+  direction:rtl;
+  text-align:right;
+}
+#accountingWorkspace .field,
+#accountingCommerceWorkspace .field,
+#accountingReportsWorkspace .field{
+  text-align:right;
+  direction:rtl;
+}
+#accountingWorkspace .field input,
+#accountingWorkspace .field select,
+#accountingWorkspace .field textarea,
+#accountingCommerceWorkspace .field input,
+#accountingCommerceWorkspace .field select,
+#accountingCommerceWorkspace .field textarea,
+#accountingReportsWorkspace .field input,
+#accountingReportsWorkspace .field select,
+#accountingReportsWorkspace .field textarea{
+  text-align:right;
+  direction:rtl;
+  border-radius:10px;
+  min-height:40px;
+}
+#accountingWorkspace .field input[inputmode=numeric],
+#accountingWorkspace .field input[inputmode=decimal],
+#accountingCommerceWorkspace .field input[inputmode=numeric],
+#accountingCommerceWorkspace .field input[inputmode=decimal]{
+  direction:ltr;
+  text-align:left;
+}
+#accountingWorkspace .data-table,
+#accountingCommerceWorkspace .data-table,
+#accountingReportsWorkspace .data-table{
+  width:100%;
+  border-collapse:collapse;
+  text-align:right;
+  direction:rtl;
+}
+#accountingWorkspace .data-table th,
+#accountingWorkspace .data-table td,
+#accountingCommerceWorkspace .data-table th,
+#accountingCommerceWorkspace .data-table td,
+#accountingReportsWorkspace .data-table th,
+#accountingReportsWorkspace .data-table td{
+  text-align:right;
+  padding:10px 12px;
+  border-bottom:1px solid var(--border-light);
+}
+#accountingWorkspace .data-table th,
+#accountingCommerceWorkspace .data-table th,
+#accountingReportsWorkspace .data-table th{
+  font-weight:800;
+  background:var(--primary-soft);
+}
+#accountingWorkspace .table-wrap,
+#accountingCommerceWorkspace .table-wrap,
+#accountingReportsWorkspace .table-wrap{
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:auto;
+  margin-top:12px;
+  background:var(--surface,#fff);
+}
+#accountingWorkspace .stats-grid,
+#accountingCommerceWorkspace .stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
+  margin:12px 0;
+  direction:rtl;
+}
+#accountingWorkspace .stat-card,
+#accountingCommerceWorkspace .stat-card{
+  text-align:right;
+  padding:14px 16px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--surface,#fff);
+  box-shadow:0 1px 2px rgba(15,23,42,.04);
+}
+#accountingWorkspace .stat-card span,
+#accountingCommerceWorkspace .stat-card span{
+  display:block;
+  color:var(--text-muted,#64748b);
+  font-size:.85rem;
+  margin-bottom:6px;
+}
+#accountingWorkspace .stat-card strong,
+#accountingWorkspace .stat-card b,
+#accountingCommerceWorkspace .stat-card strong,
+#accountingCommerceWorkspace .stat-card b{
+  font-size:1.2rem;
+  font-weight:800;
+}
+#accountingWorkspace .accounting-home-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:16px;
+  justify-content:flex-start;
+  direction:rtl;
+}
+#accountingWorkspace .hint,
+#accountingCommerceWorkspace .hint,
+#accountingReportsWorkspace .hint{
+  text-align:right;
+  color:var(--text-muted,#64748b);
+}
+#accountingCommerceWorkspace .commerce-section-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  direction:rtl;
+  margin:8px 0 14px;
+}
+#accountingCommerceWorkspace .commerce-page-header{
+  direction:rtl;
+  text-align:right;
+}
+#accountingCommerceWorkspace .commerce-invoice-summary,
+#accountingCommerceWorkspace .invoice-action-bar,
+#accountingCommerceWorkspace .invoice-items-toolbar{
+  direction:rtl;
+  text-align:right;
+}
+#accountingWorkspace .btn,
+#accountingCommerceWorkspace .btn,
+#accountingReportsWorkspace .btn{
+  border-radius:10px;
+}
+@media(max-width:640px){
+  #accountingWorkspace .accounting-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr));}
+  #accountingWorkspace .stats-grid{grid-template-columns:1fr 1fr;}
+}
+
+#accountingCommerceWorkspace .cash-entry-card,
+#commercePanelSheet .cash-entry-card{
+  direction:rtl;text-align:right;
+}
+#accountingCommerceWorkspace .cash-entry-grid,
+#commercePanelSheet .cash-entry-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px 14px;
+  margin:12px 0 14px;
+  direction:rtl;
+  text-align:right;
+}
+#accountingCommerceWorkspace .cash-entry-grid .field,
+#commercePanelSheet .cash-entry-grid .field{
+  margin:0;text-align:right;direction:rtl;
+}
+@media(max-width:560px){
+  #accountingCommerceWorkspace .cash-entry-grid,
+  #commercePanelSheet .cash-entry-grid{grid-template-columns:1fr}
+}
+
+#accountingCommerceWorkspace .bank-panel-card,
+#commercePanelSheet .bank-panel-card{
+  direction:rtl;text-align:right;
+}
+#accountingCommerceWorkspace .bank-entry-grid,
+#commercePanelSheet .bank-entry-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px 14px;
+  margin:12px 0 14px;
+  direction:rtl;
+  text-align:right;
+}
+#accountingCommerceWorkspace .bank-entry-grid .field,
+#commercePanelSheet .bank-entry-grid .field{
+  margin:0;text-align:right;direction:rtl;
+}
+@media(max-width:560px){
+  #accountingCommerceWorkspace .bank-entry-grid,
+  #commercePanelSheet .bank-entry-grid{grid-template-columns:1fr}
+}
+
+#commercePanelSheet .bank-sub,
+#accountingCommerceWorkspace .bank-sub{
+  margin-top:12px;padding:12px 14px;border-radius:12px;
+  border:1px solid var(--border);
+  direction:rtl;text-align:right;
+}
+#commercePanelSheet .bank-sub>summary,
+#accountingCommerceWorkspace .bank-sub>summary{
+  cursor:pointer;font-weight:750;text-align:right;
+}
+#commercePanelSheet .bank-sub[open]>summary,
+#accountingCommerceWorkspace .bank-sub[open]>summary{
+  margin-bottom:10px;padding-bottom:8px;
+  border-bottom:1px solid var(--border-light);
+}
+
+/* ============================================================
+   سیستم طراحی یکپارچه حسابداری — کادر، فرم، ردیف، جدول
+   تمام بخش‌ها: فاکتور، اقلام، بانک، طرف حساب، اسناد، کدینگ، …
+   ============================================================ */
+:root {
+  --acc-radius: 14px;
+  --acc-radius-sm: 10px;
+  --acc-pad: 16px;
+  --acc-gap: 12px;
+  --acc-input-h: 42px;
+  --acc-border: var(--border);
+  --acc-border-soft: var(--border-light);
+  --acc-surface: var(--card);
+  --acc-muted: var(--primary-soft);
+  --acc-shadow: var(--shadow-sm);
+}
+
+.accounting-module-sheet,
+.commerce-module-sheet,
+#accountingModuleSheet,
+#commercePanelSheet,
+#invoiceItemsSheet,
+#invoiceTypeSheet,
+#partyFormSheet,
+#accountingWorkspace,
+#accountingCommerceWorkspace,
+#accountingReportsWorkspace {
+  --border-color: var(--border);
+  --surface: var(--card);
+  --surface-muted: var(--primary-soft);
+  --surface-subtle: var(--bg2);
+  --card-bg: var(--card);
+  --text-muted: var(--text-soft);
+}
+
+/* کادر استاندارد */
+.accounting-module-sheet .card,
+.commerce-module-sheet .card,
+#accountingModuleSheet .card,
+#commercePanelSheet .card,
+#invoiceItemsSheet .card,
+#partyFormSheet .card,
+#accountingWorkspace .card,
+#accountingWorkspace .accounting-inner-card,
+#accountingCommerceWorkspace .card,
+#accountingCommerceWorkspace .commerce-invoice-card,
+#accountingCommerceWorkspace .cash-entry-card,
+#accountingReportsWorkspace .card {
+  background: var(--acc-surface);
+  border: 1px solid var(--acc-border-soft);
+  border-radius: var(--acc-radius);
+  box-shadow: var(--acc-shadow);
+  padding: var(--acc-pad);
+  margin-top: 12px;
+  color: var(--text);
+  direction: rtl;
+  text-align: right;
+}
+
+.accounting-module-sheet .card > h3,
+.commerce-module-sheet .card > h3,
+#accountingModuleSheet .card > h3,
+#commercePanelSheet .card > h3,
+#accountingWorkspace .card > h3,
+#accountingWorkspace .accounting-inner-card > h3,
+#accountingCommerceWorkspace .card > h3,
+#accountingCommerceWorkspace .commerce-invoice-card > h3,
+#accountingReportsWorkspace .card > h3 {
+  margin: 0 0 14px;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--acc-border-soft);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+  text-align: right;
+}
+
+/* شبکه فرم و فیلد */
+.accounting-module-sheet .form-grid,
+.commerce-module-sheet .form-grid,
+#accountingModuleSheet .form-grid,
+#commercePanelSheet .form-grid,
+#invoiceItemsSheet .form-grid,
+#partyFormSheet .form-grid,
+#accountingWorkspace .form-grid,
+#accountingCommerceWorkspace .form-grid,
+#accountingReportsWorkspace .form-grid,
+#accountingCommerceWorkspace .cash-entry-grid,
+#commercePanelSheet .cash-entry-grid,
+#accountingCommerceWorkspace .bank-entry-grid,
+#commercePanelSheet .bank-entry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--acc-gap);
+  margin: 12px 0 14px;
+  direction: rtl;
+  text-align: right;
+  align-items: end;
+}
+
+.accounting-module-sheet .field,
+.commerce-module-sheet .field,
+#accountingModuleSheet .field,
+#commercePanelSheet .field,
+#invoiceItemsSheet .field,
+#partyFormSheet .field,
+#accountingWorkspace .field,
+#accountingCommerceWorkspace .field,
+#accountingReportsWorkspace .field {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  margin: 0;
+  min-width: 0;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  text-align: right;
+  direction: rtl;
+}
+
+.accounting-module-sheet .field input,
+.accounting-module-sheet .field select,
+.accounting-module-sheet .field textarea,
+.commerce-module-sheet .field input,
+.commerce-module-sheet .field select,
+.commerce-module-sheet .field textarea,
+#accountingModuleSheet .field input,
+#accountingModuleSheet .field select,
+#accountingModuleSheet .field textarea,
+#commercePanelSheet .field input,
+#commercePanelSheet .field select,
+#commercePanelSheet .field textarea,
+#invoiceItemsSheet .field input,
+#invoiceItemsSheet .field select,
+#invoiceItemsSheet .field textarea,
+#partyFormSheet .field input,
+#partyFormSheet .field select,
+#partyFormSheet .field textarea,
+#accountingWorkspace .field input,
+#accountingWorkspace .field select,
+#accountingWorkspace .field textarea,
+#accountingCommerceWorkspace .field input,
+#accountingCommerceWorkspace .field select,
+#accountingCommerceWorkspace .field textarea,
+#accountingReportsWorkspace .field input,
+#accountingReportsWorkspace .field select,
+#accountingReportsWorkspace .field textarea,
+#accountingCommerceWorkspace .commerce-invoice-card .field input,
+#accountingCommerceWorkspace .commerce-invoice-card .field select,
+#accountingCommerceWorkspace .commerce-invoice-card .field textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: var(--acc-input-h);
+  padding: 9px 12px;
+  border: 1px solid var(--acc-border);
+  border-radius: var(--acc-radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.92rem;
+  box-shadow: none;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+  text-align: right;
+  direction: rtl;
+}
+
+.accounting-module-sheet .field textarea,
+#commercePanelSheet .field textarea,
+#partyFormSheet .field textarea,
+#accountingWorkspace .field textarea,
+#accountingCommerceWorkspace .field textarea {
+  min-height: 72px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.accounting-module-sheet .field input:focus,
+.accounting-module-sheet .field select:focus,
+.accounting-module-sheet .field textarea:focus,
+#commercePanelSheet .field input:focus,
+#commercePanelSheet .field select:focus,
+#commercePanelSheet .field textarea:focus,
+#invoiceItemsSheet .field input:focus,
+#partyFormSheet .field input:focus,
+#accountingWorkspace .field input:focus,
+#accountingCommerceWorkspace .field input:focus,
+#accountingCommerceWorkspace .field select:focus,
+#accountingCommerceWorkspace .field textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(8, 115, 79, 0.14);
+  background: var(--card);
+}
+
+.accounting-module-sheet .field input[inputmode="numeric"],
+.accounting-module-sheet .field input[inputmode="decimal"],
+#commercePanelSheet .field input[inputmode="numeric"],
+#commercePanelSheet .field input[inputmode="decimal"],
+#invoiceItemsSheet .field input[inputmode="numeric"],
+#invoiceItemsSheet .field input[inputmode="decimal"],
+#accountingWorkspace .field input[inputmode="numeric"],
+#accountingWorkspace .field input[inputmode="decimal"],
+#accountingCommerceWorkspace .field input[inputmode="numeric"],
+#accountingCommerceWorkspace .field input[inputmode="decimal"] {
+  direction: ltr;
+  text-align: left;
+  font-variant-numeric: tabular-nums;
+}
+
+.accounting-module-sheet .field input[readonly],
+#commercePanelSheet .field input[readonly],
+#invoiceItemsSheet .field input[readonly],
+#accountingCommerceWorkspace .field input[readonly],
+#accountingCommerceWorkspace .commerce-line input[readonly] {
+  background: var(--acc-muted);
+  color: var(--text);
+  cursor: default;
+  border-style: dashed;
+}
+
+/* ردیف‌های اقلام فاکتور و سند */
+.accounting-module-sheet .commerce-line,
+#commercePanelSheet .commerce-line,
+#invoiceItemsSheet .commerce-line,
+#accountingCommerceWorkspace .commerce-line,
+#accountingCommerceWorkspace .commerce-invoice-card .commerce-line,
+.accounting-voucher-line {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  align-items: end;
+  margin: 10px 0 !important;
+  padding: 14px !important;
+  border: 1px solid var(--acc-border-soft) !important;
+  border-radius: var(--acc-radius-sm) !important;
+  background: var(--acc-surface) !important;
+  box-shadow: 0 1px 2px rgba(7, 92, 77, 0.04);
+}
+
+.accounting-voucher-line {
+  grid-template-columns: minmax(150px, 1.2fr) minmax(130px, 1fr) minmax(110px, .8fr) minmax(110px, .8fr) auto;
+}
+
+#invoiceItemsSheet .commerce-lines-head,
+#invoiceItemsSheet .invoice-product-tools,
+#accountingCommerceWorkspace .invoice-product-tools,
+#commercePanelSheet .invoice-product-tools,
+#accountingCommerceWorkspace .invoice-items-toolbar,
+#commercePanelSheet .invoice-items-toolbar,
+#accountingCommerceWorkspace .invoice-action-bar,
+#commercePanelSheet .invoice-action-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--acc-border);
+  border-radius: var(--acc-radius-sm);
+  background: var(--acc-muted);
+  direction: rtl;
+  text-align: right;
+}
+
+#invoiceItemsSheet .invoice-product-tools,
+#accountingCommerceWorkspace .invoice-product-tools {
+  display: grid;
+  grid-template-columns: minmax(160px, 1.4fr) auto minmax(140px, 1fr) auto auto;
+  align-items: end;
+}
+
+/* جدول */
+.accounting-module-sheet .table-wrap,
+#commercePanelSheet .table-wrap,
+#invoiceItemsSheet .table-wrap,
+#partyFormSheet .table-wrap,
+#accountingWorkspace .table-wrap,
+#accountingCommerceWorkspace .table-wrap,
+#accountingReportsWorkspace .table-wrap {
+  border: 1px solid var(--acc-border-soft);
+  border-radius: var(--acc-radius-sm);
+  overflow: auto;
+  margin-top: 12px;
+  background: var(--acc-surface);
+  box-shadow: 0 1px 2px rgba(7, 92, 77, 0.04);
+}
+
+.accounting-module-sheet .data-table,
+#commercePanelSheet .data-table,
+#accountingWorkspace .data-table,
+#accountingCommerceWorkspace .data-table,
+#accountingReportsWorkspace .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: right;
+  direction: rtl;
+  font-size: 0.88rem;
+}
+
+.accounting-module-sheet .data-table th,
+#commercePanelSheet .data-table th,
+#accountingWorkspace .data-table th,
+#accountingCommerceWorkspace .data-table th,
+#accountingReportsWorkspace .data-table th {
+  background: var(--acc-muted);
+  color: var(--primary-dark);
+  font-weight: 800;
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--acc-border);
+  white-space: nowrap;
+}
+
+.accounting-module-sheet .data-table td,
+#commercePanelSheet .data-table td,
+#accountingWorkspace .data-table td,
+#accountingCommerceWorkspace .data-table td,
+#accountingReportsWorkspace .data-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--acc-border-soft);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.accounting-module-sheet .data-table tr:last-child td,
+#commercePanelSheet .data-table tr:last-child td,
+#accountingWorkspace .data-table tr:last-child td,
+#accountingCommerceWorkspace .data-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.accounting-module-sheet .data-table tbody tr:hover,
+#commercePanelSheet .data-table tbody tr:hover,
+#accountingWorkspace .data-table tbody tr:hover,
+#accountingCommerceWorkspace .data-table tbody tr:hover {
+  background: rgba(8, 115, 79, 0.04);
+}
+
+/* کارت آمار */
+.accounting-module-sheet .stat-card,
+#commercePanelSheet .stat-card,
+#accountingWorkspace .stat-card,
+#accountingCommerceWorkspace .stat-card {
+  text-align: right;
+  padding: 14px 16px;
+  border-radius: var(--acc-radius-sm);
+  border: 1px solid var(--acc-border-soft);
+  background: linear-gradient(160deg, var(--acc-surface), var(--acc-muted));
+  box-shadow: 0 1px 2px rgba(7, 92, 77, 0.05);
+}
+
+.accounting-module-sheet .stat-card b,
+.accounting-module-sheet .stat-card strong,
+#commercePanelSheet .stat-card b,
+#accountingCommerceWorkspace .stat-card b,
+#accountingWorkspace .stat-card b {
+  display: block;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+  margin-bottom: 4px;
+}
+
+.accounting-module-sheet .stat-card span,
+#commercePanelSheet .stat-card span,
+#accountingCommerceWorkspace .stat-card span,
+#accountingWorkspace .stat-card span {
+  display: block;
+  color: var(--text-soft);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* نوار عملیات و دکمه‌ها داخل حسابداری */
+.accounting-module-sheet .actions,
+#commercePanelSheet .actions,
+#accountingWorkspace .actions,
+#accountingCommerceWorkspace .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 12px;
+  direction: rtl;
+}
+
+.accounting-module-sheet .btn,
+#commercePanelSheet .btn,
+#invoiceItemsSheet .btn,
+#partyFormSheet .btn,
+#invoiceTypeSheet .btn,
+#accountingWorkspace .btn,
+#accountingCommerceWorkspace .btn,
+#accountingReportsWorkspace .btn {
+  border-radius: var(--acc-radius-sm);
+  min-height: 40px;
+  padding: 9px 14px;
+  font-weight: 750;
+}
+
+.accounting-module-sheet .btn-sm,
+#commercePanelSheet .btn-sm,
+#accountingCommerceWorkspace .btn-sm {
+  min-height: 34px;
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  border-radius: 8px;
+}
+
+/* زیره‌های فرعی بانک و جزئیات */
+#commercePanelSheet .bank-sub,
+#accountingCommerceWorkspace .bank-sub {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--acc-radius-sm);
+  border: 1px solid var(--acc-border-soft);
+  background: var(--acc-surface);
+  direction: rtl;
+  text-align: right;
+}
+
+#commercePanelSheet .bank-sub > summary,
+#accountingCommerceWorkspace .bank-sub > summary {
+  cursor: pointer;
+  font-weight: 750;
+  color: var(--primary-dark);
+  list-style: none;
+}
+
+#commercePanelSheet .bank-sub[open] > summary,
+#accountingCommerceWorkspace .bank-sub[open] > summary {
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--acc-border-soft);
+}
+
+/* سربرگ صفحه داخل برگه */
+.accounting-module-sheet .commerce-page-header,
+#commercePanelSheet .commerce-page-header,
+#accountingCommerceWorkspace .commerce-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--acc-border-soft);
+  border-radius: var(--acc-radius-sm);
+  background: var(--acc-muted);
+  direction: rtl;
+  text-align: right;
+}
+
+.accounting-module-sheet .commerce-page-header h2,
+#commercePanelSheet .commerce-page-header h2,
+#accountingCommerceWorkspace .commerce-page-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--primary-dark);
+}
+
+.accounting-module-sheet .commerce-page-chip,
+#commercePanelSheet .commerce-page-chip,
+#accountingCommerceWorkspace .commerce-page-chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--acc-surface);
+  border: 1px solid var(--acc-border);
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--primary-dark);
+  white-space: nowrap;
+}
+
+/* حذف ظاهر خط‌کشی قدیمی فرم فاکتور برای یکدستی */
+#accountingCommerceWorkspace .commerce-invoice-card > .form-grid:first-of-type,
+#commercePanelSheet .commerce-invoice-card > .form-grid:first-of-type {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--acc-gap);
+  margin: 12px 0 14px;
+  border: 0;
+  padding: 0;
+}
+
+#accountingCommerceWorkspace .commerce-invoice-card > .form-grid:first-of-type > .field,
+#commercePanelSheet .commerce-invoice-card > .form-grid:first-of-type > .field {
+  display: flex;
+  flex-direction: column;
+  grid-template-columns: none;
+  border-bottom: 0;
+  padding: 0;
+  gap: 6px;
+}
+
+#accountingCommerceWorkspace .commerce-invoice-card > .form-grid:first-of-type input:not([type=hidden]),
+#accountingCommerceWorkspace .commerce-invoice-card > .form-grid:first-of-type select,
+#commercePanelSheet .commerce-invoice-card > .form-grid:first-of-type input:not([type=hidden]),
+#commercePanelSheet .commerce-invoice-card > .form-grid:first-of-type select {
+  border: 1px solid var(--acc-border);
+  border-radius: var(--acc-radius-sm);
+  background: var(--bg);
+  min-height: var(--acc-input-h);
+  box-shadow: none;
+}
+
+/* جمع‌ها و خلاصه فاکتور */
+#accountingCommerceWorkspace .invoice-totals,
+#commercePanelSheet .invoice-totals,
+#accountingCommerceWorkspace .commerce-invoice-summary {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--acc-radius-sm);
+  border: 1px solid var(--acc-border);
+  background: var(--acc-muted);
+  direction: rtl;
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  #invoiceItemsSheet .invoice-product-tools,
+  #accountingCommerceWorkspace .invoice-product-tools {
+    grid-template-columns: 1fr 1fr;
+  }
+  .accounting-voucher-line {
+    grid-template-columns: 1fr 1fr;
+  }
+  .accounting-voucher-line .field:first-child,
+  .accounting-voucher-line .field:nth-child(2) {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 560px) {
+  .accounting-module-sheet .form-grid,
+  #commercePanelSheet .form-grid,
+  #accountingWorkspace .form-grid,
+  #accountingCommerceWorkspace .form-grid,
+  #accountingCommerceWorkspace .cash-entry-grid,
+  #commercePanelSheet .cash-entry-grid,
+  #accountingCommerceWorkspace .bank-entry-grid,
+  #commercePanelSheet .bank-entry-grid {
+    grid-template-columns: 1fr;
+  }
+  #invoiceItemsSheet .invoice-product-tools,
+  #accountingCommerceWorkspace .invoice-product-tools,
+  #accountingCommerceWorkspace .commerce-invoice-card .commerce-line,
+  #invoiceItemsSheet .commerce-line {
+    grid-template-columns: 1fr 1fr;
+  }
+  .accounting-module-sheet .card,
+  #commercePanelSheet .card,
+  #accountingCommerceWorkspace .commerce-invoice-card {
+    padding: 14px;
+  }
+}
+
+
+/* تاریخ شمسی یکدست — ارقام لاتین در همه فرم‌ها */
+.invoice-jalali-date input,
+.invoice-jalali-calendar,
+.invoice-jalali-calendar button,
+.invoice-jalali-calendar b,
+#jeDate, #fyStart, #fyEnd, #arFrom, #arTo, #opDate, #invoiceDate,
+input[id*="Date"], input[id*="date"],
+input[placeholder*="140"], input[placeholder*="14"] {
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+.invoice-jalali-date input,
+#jeDate, #fyStart, #fyEnd, #arFrom, #arTo, #opDate, #invoiceDate {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: plaintext;
+  letter-spacing: 0.02em;
+}
+.invoice-jalali-calendar {
+  font-family: Tahoma, "Segoe UI", Vazirmatn, sans-serif;
+  z-index: 10150;
+}
+.accounting-module-sheet .invoice-jalali-calendar {
+  z-index: 10150;
+}
+
+
+/* تقویم شمسی: پنل fixed روی body تا overflow برگه‌ها آن را مخفی نکند */
+.invoice-jalali-date { position: relative; display: flex; gap: 6px; align-items: center; }
+.invoice-jalali-date input { flex: 1; min-width: 0; }
+.invoice-jalali-calendar {
+  position: fixed !important;
+  z-index: 12000 !important;
+  min-width: 260px;
+  max-width: calc(100vw - 16px);
+  margin: 0;
+  padding: 10px;
+  border: 1px solid var(--border-color, #cbd5e1);
+  border-radius: 10px;
+  background: var(--card-bg, #fff);
+  box-shadow: 0 12px 32px rgba(0,0,0,.22);
+  font-family: Tahoma, "Segoe UI", Vazirmatn, sans-serif;
+}
+.invoice-jalali-calendar[hidden],
+.invoice-jalali-calendar:not(.is-open) {
+  display: none !important;
+}
+.invoice-jalali-calendar.is-open {
+  display: block !important;
+}
+.jalali-cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.jalali-cal-head button,
+.jalali-cal-grid button {
+  border: 1px solid var(--border-color, #ddd);
+  background: var(--card-bg, #fff);
+  border-radius: 7px;
+  padding: 6px 9px;
+  cursor: pointer;
+  color: inherit;
+}
+.jalali-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  text-align: center;
+}
+.jalali-cal-grid .weekday { font-weight: 700; padding: 5px 0; }
+.jalali-cal-grid button:hover {
+  background: var(--primary, #2563eb);
+  color: #fff;
+}
+#commercePanelSheet .invoice-jalali-calendar,
+#invoiceItemsSheet .invoice-jalali-calendar,
+.accounting-module-sheet .invoice-jalali-calendar,
+body > .invoice-jalali-calendar {
+  z-index: 12000 !important;
+}
+#invoiceItemsSheet .invoice-live-search { position: relative; z-index: 20; }
+#invoiceItemsSheet .invoice-product-suggestions {
+  position: absolute;
+  z-index: 300;
+  top: 100%;
+  right: 0;
+  left: 0;
+  max-height: 320px;
+  overflow: auto;
+  background: var(--surface, #fff);
+  border: 1px solid var(--border-color, #ccd3dd);
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.18);
+}
+
+/* اسکنر باید روی برگه اقلام/فاکتور دیده شود */
+.scanner-modal.show,
+#scannerModal.show,
+#scannerModal[style*="flex"] {
+  z-index: 10300 !important;
+}
+
+
+/* اطمینان از قابل‌کلیک بودن دکمه تقویم فاکتور */
+#invoiceJalaliCalendar,
+.jalali-cal-btn {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 5;
+  flex-shrink: 0;
+}
+
+/* فیلدهای چک فقط وقتی روش=چک */
+.settlement-cheque-fields[hidden],
+.settlement-cheque-fields[style*="display: none"] {
+  display: none !important;
+}
+
+
+/* ——— تسویه فاکتور / نوع دریافت: کادرهای پرداخت همرنگ تم ——— */
+.settlement-stage-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 12px);
+  padding: 14px;
+  margin: 10px 0;
+  background: linear-gradient(180deg, var(--card) 0%, var(--primary-soft) 180%);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  direction: rtl;
+  text-align: right;
+  overflow: hidden; /* prevent children from spilling outside the card */
+  min-width: 0;
+}
+.settlement-stage-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: end;
+  min-width: 0;
+}
+.settlement-method-picker,
+[data-settle-method-wrap] {
+  min-width: 0;
+  width: 100%;
+}
+.settlement-method-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-soft);
+  margin-bottom: 6px;
+  text-align: right;
+}
+.settlement-method-chips {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  gap: 6px;
+  padding: 5px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  direction: rtl;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+.settlement-method-chip {
+  flex: 1 1 auto;
+  min-width: 72px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 9px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, box-shadow .15s ease;
+  text-align: center;
+}
+.settlement-method-chip.is-active {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: #fff !important;
+  box-shadow: 0 2px 8px rgba(7, 92, 77, 0.28);
+}
+.settlement-method-chip:not(.is-active):hover {
+  background: var(--primary-soft);
+  color: var(--primary-dark);
+}
+.settlement-amount-field {
+  text-align: right;
+}
+.settlement-amount-field input {
+  font-weight: 700;
+  border-color: var(--border) !important;
+  background: var(--card) !important;
+  color: var(--text) !important;
+  text-align: right;
+  direction: ltr;
+}
+.settlement-amount-field input:focus {
+  outline: 2px solid var(--primary);
+  border-color: var(--primary) !important;
+}
+.settlement-totals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.settlement-totals-grid div {
+  background: var(--primary-soft);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: right;
+}
+.settlement-totals-grid span { color: var(--text-soft); font-size: 0.85rem; }
+.settlement-totals-grid b { color: var(--primary-dark); font-size: 1rem; }
+.settlement-totals-grid .is-credit {
+  background: #fff7ed;
+  border-color: #fdba74;
+}
+.settlement-totals-grid .is-credit b { color: var(--warning, #d97706); }
+.settlement-cheque-fields {
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--primary-soft);
+  direction: rtl;
+  text-align: right;
+}
+.settlement-cheque-fields .field {
+  text-align: right;
+}
+.settlement-cheque-fields .field input {
+  background: var(--card) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px;
+  min-height: 42px;
+  text-align: right;
+}
+.settlement-cheque-fields[hidden] { display: none !important; }
+#settlementAdd {
+  border-color: var(--primary) !important;
+  color: var(--primary-dark) !important;
+  background: var(--primary-soft) !important;
+  font-weight: 700;
+}
+/* کادرهای روش پرداخت در فرم فاکتور */
+.invoice-payment-row {
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  margin: 10px 0 !important;
+  background: linear-gradient(180deg, var(--card) 0%, var(--primary-soft) 180%) !important;
+  color: var(--text);
+  direction: rtl;
+  text-align: right;
+}
+.invoice-payment-row .field {
+  text-align: right;
+}
+.invoice-payment-row .field input,
+.invoice-payment-row .field select {
+  background: var(--card) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+  border-radius: 10px;
+  min-height: 42px;
+  text-align: right;
+}
+.invoice-payment-row [data-pay-cheque] input {
+  text-align: right;
+}
+@media (max-width: 640px) {
+  .settlement-stage-top {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .settlement-stage-top .settlement-remove-btn {
+    width: 100%;
+    justify-self: stretch;
+  }
+  .settlement-totals-grid { grid-template-columns: 1fr; }
+  .settlement-method-chips { border-radius: 14px; }
+}
+@media (max-width: 420px) {
+  .settlement-method-chips {
+    flex-direction: column;
+  }
+  .settlement-method-chip {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+/* ——— فهرست فشرده فاکتورهای ثبت‌شده پایین فرم ——— */
+.invoice-registered-block {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border, #b9ddc2);
+}
+.invoice-registered-title {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  color: var(--primary-dark, #075c4d);
+}
+.invoice-list-wrap {
+  max-height: 220px;
+  overflow: auto;
+  border: 1px solid var(--border, #b9ddc2);
+  border-radius: 10px;
+  background: var(--card, #fff);
+}
+.invoice-list-table {
+  margin: 0 !important;
+  font-size: 0.88rem;
+}
+.invoice-list-table th,
+.invoice-list-table td {
+  padding: 6px 8px !important;
+  vertical-align: middle;
+}
+.invoice-list-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--primary-soft, #e5f3e8);
+  z-index: 1;
+}
+.invoice-list-row td {
+  border-bottom: 1px solid var(--border-light, #dceee0);
+}
+.invoice-list-party {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.invoice-list-amount { font-weight: 700; white-space: nowrap; }
+.invoice-list-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+.invoice-list-actions .btn {
+  padding: 4px 8px !important;
+  font-size: 0.8rem !important;
+  margin: 0 !important;
+}
+.invoice-status-pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.invoice-status-pill.is-posted {
+  background: var(--primary-soft, #e5f3e8);
+  color: var(--primary-dark, #075c4d);
+}
+.invoice-status-pill.is-draft {
+  background: #fff7ed;
+  color: #c2410c;
+}
+.invoice-list-hint {
+  margin: 6px 0 0;
+  font-size: 0.8rem;
+  color: var(--text-soft, #617d70);
+}
+.invoice-list-empty {
+  text-align: center;
+  color: var(--text-soft, #617d70);
+  padding: 12px !important;
+}
+@media (max-width: 640px) {
+  .invoice-list-wrap { max-height: 180px; }
+  .invoice-list-party { max-width: 80px; }
+}
+
+
+/* فیلتر حساب فقط برای دفتر معین — مخفی نماند زیر استایل form-grid */
+#accountingReportsWorkspace #arAccountWrap[hidden],
+#accountingReportsWorkspace .field[hidden] {
+  display: none !important;
+}
+
+
+/* ——— خلاصه استاندارد گزارش‌ها ——— */
+#accountingReportsWorkspace .ar-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  margin: 0 0 12px;
+}
+#accountingReportsWorkspace .ar-summary-card {
+  background: var(--primary-soft, #e5f3e8);
+  border: 1px solid var(--border, #b9ddc2);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+#accountingReportsWorkspace .ar-summary-card span {
+  color: var(--text-soft, #617d70);
+  font-size: 0.82rem;
+}
+#accountingReportsWorkspace .ar-summary-card b {
+  color: var(--primary-dark, #075c4d);
+  font-size: 0.98rem;
+}
+#accountingReportsWorkspace .ar-section-title {
+  margin: 14px 0 8px;
+  font-size: 0.95rem;
+  color: var(--primary-dark, #075c4d);
+}
+#accountingReportsWorkspace .data-table tfoot td,
+#accountingReportsWorkspace .data-table tr:last-child td {
+  font-weight: 600;
+}
+
+/* ——— گزارش انبارگردانی فشرده (یک صفحه) ——— */
+.page-reports-compact .report-page-card {
+  padding: 12px;
+}
+.report-compact-dash,
+.report-panel-compact {
+  margin: 0 0 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 10px;
+  background: var(--card, #fff);
+}
+.report-compact-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.report-compact-head strong {
+  font-size: 0.92rem;
+}
+.report-compact-foot {
+  margin: 6px 0 0;
+  font-size: 0.78rem;
+}
+.stats-grid-compact {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+}
+.stats-grid-compact .stat-card {
+  padding: 6px 4px;
+  min-height: 0;
+}
+.stats-grid-compact .stat-value {
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+.stats-grid-compact .stat-label {
+  font-size: 0.7rem;
+  margin-top: 2px;
+}
+.report-actions-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+.report-actions-grid .btn {
+  width: 100%;
+  margin: 0;
+}
+.report-fold {
+  margin: 8px 0 0;
+  padding: 8px 10px;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 10px;
+  background: var(--primary-soft, #e5f3e8);
+  color: var(--text, #12483d);
+}
+.report-fold > summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  list-style: none;
+}
+.report-fold > summary::-webkit-details-marker { display: none; }
+.report-fold[open] > summary {
+  margin-bottom: 8px;
+}
+.table-wrap-compact {
+  overflow: auto;
+  max-height: 220px;
+}
+.data-table-compact th,
+.data-table-compact td {
+  padding: 5px 6px;
+  font-size: 0.78rem;
+}
+.report-history-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+@media (max-width: 520px) {
+  .stats-grid-compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .report-actions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+
+/* ——— جداول گزارش انبارگردانی و نتایج حسابداری: کنتراست تم سبز ——— */
+#page-reports .table-wrap,
+#page-reports .table-wrap-compact,
+#cardexResult .table-wrap,
+#accountingReportsWorkspace .table-wrap,
+#arResult .ar-table-scroll {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: auto;
+  background: var(--card);
+  color: var(--text);
+}
+
+#page-reports .data-table,
+#page-reports .data-table-compact,
+#cardexResult .data-table,
+#accountingReportsWorkspace .data-table,
+#arResult .ar-report-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--text);
+  background: var(--card);
+}
+
+#page-reports .data-table th,
+#page-reports .data-table-compact th,
+#cardexResult .data-table th,
+#accountingReportsWorkspace .data-table th,
+#arResult .ar-report-table th {
+  background: var(--primary-soft) !important;
+  color: var(--primary-dark) !important;
+  font-weight: 800;
+  border-bottom: 1px solid var(--border);
+  padding: 9px 10px;
+}
+
+#page-reports .data-table td,
+#page-reports .data-table-compact td,
+#cardexResult .data-table td,
+#accountingReportsWorkspace .data-table td,
+#arResult .ar-report-table td {
+  color: var(--text) !important;
+  border-bottom: 1px solid var(--border-light);
+  padding: 8px 10px;
+  background: transparent;
+}
+
+#page-reports .data-table tbody tr:nth-child(even) td,
+#cardexResult .data-table tbody tr:nth-child(even) td,
+#accountingReportsWorkspace .data-table tbody tr:nth-child(even) td {
+  background: var(--bg2);
+}
+
+#page-reports .report-fold,
+#page-reports .report-panel-compact,
+#page-reports .report-compact-dash {
+  color: var(--text);
+}
+
+#page-reports .report-fold > summary {
+  color: var(--primary-dark);
+}
+
+#page-reports .hint,
+#cardexResult.hint,
+#arResult .hint {
+  color: var(--text-soft) !important;
+}
+
+#page-reports .stat-card,
+#page-reports .stats-grid-compact .stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+#page-reports .stat-value,
+#page-reports .stat-card strong {
+  color: var(--primary-dark);
+}
+
+#page-reports .stat-label {
+  color: var(--text-soft);
+}
+
+#arResult.ar-result-panel,
+#arResult {
+  color: var(--text);
+}
+
+[data-theme='dark'] #page-reports .data-table tbody tr:nth-child(even) td,
+[data-theme='dark'] #cardexResult .data-table tbody tr:nth-child(even) td,
+[data-theme='dark'] #accountingReportsWorkspace .data-table tbody tr:nth-child(even) td,
+[data-theme='dark'] #arResult .ar-report-table tbody tr:nth-child(even) td {
+  background: var(--bg2);
+}
+
+/* ——— تنظیمات حسابداری بهینه‌شده ——— */
+.acc-settings-panel { max-width: 720px; }
+.acc-settings-group {
+  margin: 12px 0 0;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--primary-soft);
+}
+.acc-settings-group-title {
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin-bottom: 8px;
+  color: var(--primary-dark, #075c4d);
+}
+.acc-settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px 12px;
+}
+.acc-settings-grid .field {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.acc-settings-grid .field .hint,
+.acc-settings-group > .hint {
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+.acc-settings-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 10px;
+}
+.acc-settings-check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 8px 0 0;
+  cursor: pointer;
+}
+.acc-settings-check input {
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.acc-settings-check strong {
+  display: block;
+  font-size: 0.9rem;
+}
+.acc-settings-check .hint {
+  display: block;
+  margin-top: 2px;
+}
+.acc-settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+
+/* دیالوگ سایز چاپ باید بالای همه برگه‌های فاکتور/گزارش باشد */
+#anbarinPrintSizeModal {
+  z-index: 50000 !important;
+}
+
+
+/* ——— انتخاب لوگو فروشگاه ——— */
+.logo-picker-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--card) 0%, var(--primary-soft) 160%);
+  padding: 12px;
+  color: var(--text);
+}
+.logo-picker-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+.logo-picker-head strong {
+  color: var(--primary-dark);
+  font-size: 0.95rem;
+}
+.logo-picker-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.logo-picker-preview-wrap {
+  width: 96px;
+  height: 72px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  background: var(--bg2);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  flex: 0 0 auto;
+}
+.logo-picker-preview {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.logo-picker-placeholder {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  text-align: center;
+  padding: 4px;
+}
+.logo-picker-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.logo-picker-file-btn {
+  cursor: pointer;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ——— دکمه‌های پشتیبان خودکار / آنلاین ——— */
+.auto-backup-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+.auto-backup-btn {
+  border: 1px solid var(--border) !important;
+  background: var(--card) !important;
+  color: var(--text) !important;
+  font-weight: 700;
+  border-radius: 10px !important;
+  min-height: 40px;
+  box-shadow: none !important;
+  transition: background .15s ease, color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.auto-backup-btn.is-available:hover {
+  background: var(--primary-soft) !important;
+  color: var(--primary-dark) !important;
+  border-color: var(--primary) !important;
+}
+.auto-backup-btn.is-active {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary)) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 2px 8px rgba(7, 92, 77, 0.28) !important;
+}
+.auto-backup-btn.is-available {
+  opacity: 1;
+}
+.auto-backup-btn-run {
+  background: var(--primary-soft) !important;
+  color: var(--primary-dark) !important;
+  border-color: var(--primary) !important;
+}
+.auto-backup-status {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text) !important;
+}
+
+
+/* ——— مشخصات چک یک‌ستونه + کادرهای مبلغ/سررسید ——— */
+.settlement-cheque-stack {
+  display: flex !important;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--primary-soft);
+  direction: rtl;
+  text-align: right;
+}
+.settlement-cheque-stack[hidden],
+.settlement-cheque-stack[style*="display: none"] {
+  display: none !important;
+}
+.settlement-cheque-title {
+  font-weight: 800;
+  color: var(--primary-dark);
+  font-size: 0.92rem;
+  margin-bottom: 2px;
+}
+.settlement-field-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  text-align: right;
+}
+.settlement-field-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-soft);
+}
+.settlement-field-box input,
+.settlement-amount-field input,
+.settlement-credit-box input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  background: var(--card) !important;
+  color: var(--text) !important;
+  font: inherit;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+.settlement-field-box input:focus,
+.settlement-amount-field input:focus,
+.settlement-credit-box input:focus {
+  outline: 2px solid var(--primary);
+  border-color: var(--primary) !important;
+}
+.settlement-credit-box {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  background: linear-gradient(180deg, var(--card) 0%, var(--primary-soft) 160%);
+}
+.settlement-stage-top {
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) auto;
+  align-items: end;
+  min-width: 0;
+}
+.settlement-amount-field {
+  width: 100%;
+  min-width: 0;
+}
+.settlement-remove-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: end;
+  min-height: 44px;
+}
+
+
+/* ——— نوار دکمه‌های گزارش حسابداری ——— */
+.ar-actions-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 10px;
+  margin: 12px 0 14px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--card) 0%, var(--primary-soft) 160%);
+}
+.ar-actions-secondary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  flex: 1 1 280px;
+  min-width: 0;
+}
+.ar-action-btn {
+  min-height: 42px;
+  margin: 0;
+  width: 100%;
+  font-weight: 700;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.ar-action-primary {
+  flex: 0 0 auto;
+  min-width: 140px;
+  padding-inline: 18px;
+  box-shadow: 0 2px 8px rgba(7, 92, 77, 0.22);
+}
+@media (max-width: 720px) {
+  .ar-actions-bar {
+    flex-direction: column;
+  }
+  .ar-action-primary {
+    width: 100%;
+  }
+  .ar-actions-secondary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 380px) {
+  .ar-actions-secondary {
+    grid-template-columns: 1fr;
+  }
+}
