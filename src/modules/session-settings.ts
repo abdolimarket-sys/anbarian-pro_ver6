@@ -118,6 +118,18 @@ export function applySettingsFromForm(): void {
   settings.businessPostalCode = text('setBusinessPostalCode');
   // لوگو از طریق input فایل به‌صورت data URL در settings نگه داشته می‌شود (رویداد change)
 
+  // پیامک (اختیاری)
+  const smsEnabledEl = g('setSmsEnabled') as HTMLInputElement | null;
+  if (smsEnabledEl) settings.smsEnabled = !!smsEnabledEl.checked;
+  const smsProviderEl = g('setSmsProvider') as HTMLSelectElement | null;
+  if (smsProviderEl) settings.smsProvider = (smsProviderEl.value as AppSettings['smsProvider']) || 'device';
+  settings.smsUsername = text('setSmsUsername');
+  settings.smsApiKey = text('setSmsApiKey');
+  settings.smsSender = text('setSmsSender');
+  settings.smsCustomUrl = text('setSmsCustomUrl');
+  const smsTpl = text('setSmsDefaultTemplate');
+  if (smsTpl) settings.smsDefaultTemplate = smsTpl;
+
   saveSettingsNow();
   toast('تنظیمات ذخیره شد', 'success');
 }
@@ -182,6 +194,17 @@ export function fillSettingsForm(): void {
   fillText('setBusinessNationalId', settings.businessNationalId);
   fillText('setBusinessEconomicCode', settings.businessEconomicCode);
   fillText('setBusinessPostalCode', settings.businessPostalCode);
+  // پیامک
+  const smsEn = document.getElementById('setSmsEnabled') as HTMLInputElement | null;
+  if (smsEn) smsEn.checked = !!settings.smsEnabled;
+  const smsProv = document.getElementById('setSmsProvider') as HTMLSelectElement | null;
+  if (smsProv) smsProv.value = settings.smsProvider || 'device';
+  fillText('setSmsUsername', settings.smsUsername || '');
+  fillText('setSmsApiKey', settings.smsApiKey || '');
+  fillText('setSmsSender', settings.smsSender || '');
+  fillText('setSmsCustomUrl', settings.smsCustomUrl || '');
+  fillText('setSmsDefaultTemplate', settings.smsDefaultTemplate || '');
+
   const logoPrev = document.getElementById('setBusinessLogoPreview') as HTMLImageElement | null;
   const logoPh = document.getElementById('setBusinessLogoPlaceholder');
   if (logoPrev) {

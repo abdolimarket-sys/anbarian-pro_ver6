@@ -60,6 +60,17 @@ export interface AppSettings {
   businessPostalCode?: string;
   /** لوگو به صورت data URL (مثلاً image/png;base64,...) */
   businessLogoDataUrl?: string;
+  /** تنظیمات پیامک (اختیاری؛ پیش‌فرض خاموش) */
+  smsEnabled?: boolean;
+  /** device | kavenegar | faraz | melipayamak | custom */
+  smsProvider?: 'device' | 'kavenegar' | 'faraz' | 'melipayamak' | 'custom';
+  smsApiKey?: string;
+  /** نام کاربری (ملی‌پیامک و برخی سرویس‌ها) */
+  smsUsername?: string;
+  smsSender?: string;
+  smsCustomUrl?: string;
+  /** الگوی پیام پیش‌فرض؛ از {name} {amount} {date} {number} {balance} پشتیبانی می‌شود */
+  smsDefaultTemplate?: string;
 }
 
 export interface Session {

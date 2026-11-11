@@ -52,7 +52,7 @@ function refreshSelects(): void {
     productSelect.replaceChildren(new Option('انتخاب کالا...', ''));
     products.forEach((p) => productSelect.add(new Option(`${p.name} — ${p.code || p.sku || p.id}`, p.id)));
     if (products.some((p) => p.id === current)) productSelect.value = current;
-    enhanceSelectWithSearch(productSelect, { placeholder: 'جستجوی کالا (نام / بارکد)...' });
+    enhanceSelectWithSearch(productSelect, { placeholder: 'جستجوی کالا (نام / بارکد)...', minOptions: 0 });
     refreshSearchableSelect(productSelect);
   }
   const dest = $('invDocDestination') as HTMLSelectElement | null;

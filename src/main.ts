@@ -74,6 +74,7 @@ import {
   actionSetPhase,
   bindBusinessLogoControls,
 } from './modules/session-settings';
+import { openSmsComposeDialog, sendSms, isSmsConfigured } from './modules/sms';
 import {
   renderReportHTML,
   copyTextReport,
@@ -655,6 +656,48 @@ function renderShell() {
             </div>
           </div>
 
+          
+          <div class="card" style="margin-top:12px;padding:12px;border:1px solid var(--border,#dceee0);border-radius:12px;background:var(--bg2,#f7fbf8)">
+            <h3 style="margin:0 0 8px;font-size:1rem">ارسال پیامک</h3>
+            <p class="hint" style="margin:0 0 10px">اختیاری است. حالت «پیامک گوشی» بدون API کار می‌کند. برای ارسال خودکار: کاوه‌نگار، فراز اس‌ام‌اس، ملی‌پیامک یا آدرس سفارشی.</p>
+            <label class="field" style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <input type="checkbox" id="setSmsEnabled" />
+              <span>فعال‌سازی ارسال پیامک</span>
+            </label>
+            <label class="field" style="display:block;margin-bottom:8px">
+              <span style="font-size:.82rem;font-weight:700;color:var(--text-soft)">روش ارسال</span>
+              <select id="setSmsProvider" style="width:100%;margin-top:4px;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)">
+                <option value="device">پیامک گوشی (sms:)</option>
+                <option value="kavenegar">کاوه‌نگار</option>
+                <option value="faraz">فراز اس‌ام‌اس</option>
+                <option value="melipayamak">ملی‌پیامک</option>
+                <option value="custom">آدرس سفارشی (Webhook)</option>
+              </select>
+            </label>
+            <label class="field" style="display:block;margin-bottom:8px">
+              <span style="font-size:.82rem;font-weight:700;color:var(--text-soft)">نام کاربری (ملی‌پیامک)</span>
+              <input id="setSmsUsername" placeholder="فقط برای ملی‌پیامک" style="width:100%;margin-top:4px;direction:ltr;text-align:left;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)" autocomplete="off" />
+            </label>
+            <label class="field" style="display:block;margin-bottom:8px">
+              <span style="font-size:.82rem;font-weight:700;color:var(--text-soft)">کلید API / رمز عبور</span>
+              <input id="setSmsApiKey" type="password" placeholder="کاوه‌نگار / فراز / رمز ملی‌پیامک / توکن سفارشی" style="width:100%;margin-top:4px;direction:ltr;text-align:left;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)" autocomplete="off" />
+            </label>
+            <label class="field" style="display:block;margin-bottom:8px">
+              <span style="font-size:.82rem;font-weight:700;color:var(--text-soft)">شماره خط ارسال‌کننده (اختیاری)</span>
+              <input id="setSmsSender" placeholder="مثلاً 1000..." style="width:100%;margin-top:4px;direction:ltr;text-align:left;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)" />
+            </label>
+            <label class="field" style="display:block;margin-bottom:8px">
+              <span style="font-size:.82rem;font-weight:700;color:var(--text-soft)">آدرس سرویس سفارشی</span>
+              <input id="setSmsCustomUrl" placeholder="https://example.com/api/sms" style="width:100%;margin-top:4px;direction:ltr;text-align:left;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)" />
+            </label>
+            <label class="field" style="display:block;margin-bottom:8px">
+              <span style="font-size:.82rem;font-weight:700;color:var(--text-soft)">الگوی پیام پیش‌فرض</span>
+              <textarea id="setSmsDefaultTemplate" rows="3" placeholder="سلام {name}، مانده شما {balance} ریال است." style="width:100%;margin-top:4px;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)"></textarea>
+              <span class="hint" style="font-size:.75rem">متغیرها: {name} {amount} {date} {number} {balance} {business}</span>
+            </label>
+            <button type="button" class="btn btn-secondary btn-sm" id="btnSmsTest">ارسال پیامک آزمایشی</button>
+          </div>
+
           <button class="btn btn-primary btn-block" id="btnSaveSettings" style="margin-top:12px">💾 ذخیره تنظیمات</button>
           <div class="actions" style="margin-top:12px">
             <button class="btn btn-secondary btn-block" id="btnClearCounts">پاک کردن همه شمارش‌ها</button>
@@ -995,6 +1038,15 @@ function bindEvents() {
       console.error('[Anbarin] saving settings failed:', err);
       toast('ذخیره تنظیمات انجام نشد؛ فضای ذخیره‌سازی را بررسی کنید', 'error');
     }
+  });
+
+  document.getElementById('btnSmsTest')?.addEventListener('click', () => {
+    openSmsComposeDialog({
+      phone: '',
+      name: '',
+      title: 'پیامک آزمایشی',
+      defaultMessage: 'پیامک آزمایشی از انبارین',
+    });
   });
   // دکمه‌های عملیات شمارش باید به توابع واقعی متصل باشند؛ قبلاً فقط در رابط نمایش داده می‌شدند.
   document.getElementById('btnClearCounts')?.addEventListener('click', () => {

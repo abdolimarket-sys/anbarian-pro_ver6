@@ -11,6 +11,7 @@ import { toast } from './ui';
 import { printHtmlSafely, shareFileContent, downloadFile } from '@/utils/helpers';
 import { openProductModal, offerAddProduct } from './products-ui';
 import { enhanceSelectWithSearch, refreshSearchableSelect, normalizeSearchText } from './searchable-select';
+import { openSmsComposeDialog } from './sms';
 import { choosePaperSize } from './print-paper';
 import { enhanceDateFields, attachJalaliCalendar, todayJalali as sharedTodayJalali } from './date-picker';
 import { products, logAudit, findProductByCode, settings } from './state';
@@ -118,8 +119,26 @@ function partyOptions(type?:'customer'|'supplier'):string {
 function partyTypeLabel(t:AccountingParty['type']):string {
   return t==='customer'?'مشتری':t==='supplier'?'تأمین‌کننده':'مشتری و تأمین‌کننده';
 }
+
+function bindPartySmsButtons(root: ParentNode = document): void {
+  root.querySelectorAll<HTMLButtonElement>('[data-sms-party]').forEach((btn) => {
+    if ((btn as any)._smsBound) return;
+    (btn as any)._smsBound = true;
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.smsParty || '';
+      const p = (commerce?.parties || []).find((x) => x.id === id);
+      if (!p) return;
+      openSmsComposeDialog({
+        phone: p.phone || '',
+        name: p.name,
+        title: `پیامک به ${p.name}`,
+      });
+    });
+  });
+}
+
 function partiesPanelHtml():string {
-  const rows=(commerce?.parties||[]).slice().sort((a,b)=>a.name.localeCompare(b.name,'fa')).map(p=>`<tr class="${p.isActive?'':'party-inactive'}"><td>${esc(p.name)}</td><td>${partyTypeLabel(p.type)}</td><td>${esc(p.phone||'—')}</td><td>${esc(p.nationalId||'—')}</td><td>${esc(p.address||'—')}</td><td>${p.isActive?'فعال':'غیرفعال'}</td><td><button type="button" class="btn btn-sm btn-secondary" data-edit-party="${esc(p.id)}">ویرایش</button></td></tr>`).join('')||'<tr><td colspan="7">هنوز طرف حسابی ثبت نشده است.</td></tr>';
+  const rows=(commerce?.parties||[]).slice().sort((a,b)=>a.name.localeCompare(b.name,'fa')).map(p=>`<tr class="${p.isActive?'':'party-inactive'}"><td>${esc(p.name)}</td><td>${partyTypeLabel(p.type)}</td><td>${esc(p.phone||'—')}</td><td>${esc(p.nationalId||'—')}</td><td>${esc(p.address||'—')}</td><td>${p.isActive?'فعال':'غیرفعال'}</td><td style="white-space:nowrap"><button type="button" class="btn btn-sm btn-secondary" data-edit-party="${esc(p.id)}">ویرایش</button>${p.phone?` <button type="button" class="btn btn-sm btn-secondary" data-sms-party="${esc(p.id)}">پیامک</button>`:''}</td></tr>`).join('')||'<tr><td colspan="7">هنوز طرف حسابی ثبت نشده است.</td></tr>';
   const editing=editingPartyId?(commerce?.parties||[]).find(p=>p.id===editingPartyId):undefined;
   return `<div class="card" style="margin-top:12px" dir="rtl">
 <h3>تعریف شخص / طرف حساب</h3>
@@ -220,7 +239,8 @@ function openPartyFormSheet(opts?:{preferType?:'customer'|'supplier'|'both'; sel
     if(saved){close(true);await render();}
   });
   overlay.querySelector('#partyResetBtn')?.addEventListener('click',()=>{editingPartyId=null;close(true);openPartyFormSheet(opts);});
-  overlay.querySelectorAll<HTMLButtonElement>('[data-edit-party]').forEach(btn=>btn.addEventListener('click',()=>{
+  bindPartySmsButtons(overlay);
+overlay.querySelectorAll<HTMLButtonElement>('[data-edit-party]').forEach(btn=>btn.addEventListener('click',()=>{
     editingPartyId=btn.dataset.editParty||null;
     close(false);
     openPartyFormSheet({preferType:prefer,selectAfterSave:opts?.selectAfterSave});
@@ -2098,7 +2118,7 @@ function enhanceCommerceSelects():void {
     { id: 'cashAccount', placeholder: 'جستجوی حساب صندوق/بانک...', min: 6 },
     { id: 'cashInvoice', placeholder: 'جستجوی فاکتور...', min: 6 },
     { id: 'opParty', placeholder: 'جستجوی طرف حساب...' },
-    { id: 'openingCostProduct', placeholder: 'جستجوی کالا...' },
+    { id: 'openingCostProduct', placeholder: 'جستجوی کالا...', min: 0 },
   ];
   for (const item of map) {
     const sel = document.getElementById(item.id) as HTMLSelectElement | null;
@@ -2106,6 +2126,7 @@ function enhanceCommerceSelects():void {
     enhanceSelectWithSearch(sel, { placeholder: item.placeholder, minOptions: item.min ?? 8 });
     refreshSearchableSelect(sel);
   }
+  bindPartySmsButtons();
 }
 
 async function persist(next:CommerceData):Promise<void>{commerce=next;await saveCommerceData(next);render()}
@@ -2353,7 +2374,8 @@ function bind():void {
     if(saved)await render();
   });
   el<HTMLButtonElement>('#partyResetBtn')?.addEventListener('click',()=>{editingPartyId=null;render();});
-  document.querySelectorAll<HTMLButtonElement>('[data-edit-party]').forEach(btn=>btn.addEventListener('click',()=>{
+  bindPartySmsButtons(document);
+document.querySelectorAll<HTMLButtonElement>('[data-edit-party]').forEach(btn=>btn.addEventListener('click',()=>{
     editingPartyId=btn.dataset.editParty||null;
     render().then(()=>el<HTMLElement>('#partyFormGrid')?.scrollIntoView({behavior:'smooth',block:'start'}));
   }));

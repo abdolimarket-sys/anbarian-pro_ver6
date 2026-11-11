@@ -56,8 +56,8 @@ export function enhanceSelectWithSearch(
   const minOptions = opts.minOptions ?? 8;
   const maxVisible = opts.maxVisible ?? 50;
 
-  // اگر گزینه‌ها کم است، نیازی به جستجو نیست
-  if (sel.options.length < minOptions) return;
+  // اگر گزینه‌ها کمتر از آستانه است، نیازی به جستجو نیست (مگر minOptions=0)
+  if (minOptions > 0 && sel.options.length < minOptions) return;
 
   const wrapper = document.createElement('div');
   wrapper.className = 'searchable-select';
@@ -233,8 +233,7 @@ export function enhanceSelectWithSearch(
   sel.addEventListener('change', syncInputFromSelect);
 
   function refresh(): void {
-    // اگر گزینه‌ها کم شد، به حالت عادی برگرد
-    if (sel.options.length < minOptions) {
+    if (minOptions > 0 && sel.options.length < minOptions) {
       destroy();
       return;
     }

@@ -1277,12 +1277,13 @@ function bindReportRunner():void{
   ['#arParty','#arProduct','#arMethod','#arFilterAccount','#arWarehouse'].forEach(q=>el<HTMLSelectElement>(q)?.addEventListener('change',renderReport));
   el<HTMLButtonElement>('#arBackCatalog')?.addEventListener('click',()=>{activeReportId=null;renderReportsCatalog();});
 
-  // کادرهای طولانی (طرف‌حساب / کالا / حساب) جستجوپذیر شوند — بدون اسکرول ۱۰۰۰تایی
-  enhanceSelectWithSearch(el<HTMLSelectElement>('#arParty'), { placeholder: 'جستجوی طرف حساب...', minOptions: 6 });
-  enhanceSelectWithSearch(el<HTMLSelectElement>('#arProduct'), { placeholder: 'جستجوی کالا (نام / بارکد)...', minOptions: 6 });
-  enhanceSelectWithSearch(el<HTMLSelectElement>('#arAccount'), { placeholder: 'جستجوی حساب...', minOptions: 6 });
-  enhanceSelectWithSearch(el<HTMLSelectElement>('#arFilterAccount'), { placeholder: 'جستجوی حساب...', minOptions: 6 });
-  enhanceSelectWithSearch(el<HTMLSelectElement>('#arWarehouse'), { placeholder: 'جستجوی انبار...', minOptions: 6 });
+  queueMicrotask(() => {
+    enhanceSelectWithSearch(el<HTMLSelectElement>('#arParty'), { placeholder: 'جستجوی طرف حساب...', minOptions: 0 });
+    enhanceSelectWithSearch(el<HTMLSelectElement>('#arProduct'), { placeholder: 'جستجوی کالا (نام / بارکد)...', minOptions: 0 });
+    enhanceSelectWithSearch(el<HTMLSelectElement>('#arAccount'), { placeholder: 'جستجوی حساب...', minOptions: 3 });
+    enhanceSelectWithSearch(el<HTMLSelectElement>('#arFilterAccount'), { placeholder: 'جستجوی حساب...', minOptions: 3 });
+    enhanceSelectWithSearch(el<HTMLSelectElement>('#arWarehouse'), { placeholder: 'جستجوی انبار...', minOptions: 3 });
+  });
 }
 
 function renderReportRunner(reportId:string):void{

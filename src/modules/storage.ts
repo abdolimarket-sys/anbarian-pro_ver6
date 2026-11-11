@@ -82,6 +82,13 @@ const DEFAULT_SETTINGS: AppSettings = {
   businessEconomicCode: '',
   businessPostalCode: '',
   businessLogoDataUrl: '',
+  smsEnabled: false,
+  smsProvider: 'device',
+  smsApiKey: '',
+  smsUsername: '',
+  smsSender: '',
+  smsCustomUrl: '',
+  smsDefaultTemplate: 'سلام {name}، مانده حساب شما {balance} ریال است. {business}',
 };
 
 export function loadSettings(): AppSettings {
