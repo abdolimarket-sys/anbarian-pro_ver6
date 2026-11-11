@@ -1,5 +1,4 @@
 name: Build Anbarin APK
-
 on:
   push:
     branches: [main, master]
@@ -12,7 +11,6 @@ jobs:
     name: Build debug APK
     runs-on: ubuntu-latest
     timeout-minutes: 45
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,9 +29,13 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
 
       - name: Accept Android licenses
-        run: yes | sdkmanager --licenses >/dev/null || true
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager --update || true
 
       - name: Install npm dependencies
         run: npm install --registry https://registry.npmjs.org/
