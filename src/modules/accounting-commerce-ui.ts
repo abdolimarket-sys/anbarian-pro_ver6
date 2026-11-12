@@ -1023,13 +1023,18 @@ body{font-family:Tahoma,"Segoe UI",Arial,sans-serif;color:#0f172a;margin:16px;fo
 .brand-meta{padding:8px 16px;background:#f0fdfa;border-bottom:1px solid #cce7e2;color:#115e59;font-size:11px}
 .brand-meta span{margin-left:12px}
 .body{padding:14px 16px}
-.head{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 8px}.party-panel{min-width:0}.party-panel p{overflow-wrap:anywhere}.invoice-meta{margin-bottom:12px}
-.panel{border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;background:#fafbfc}
-.panel b{display:block;margin-bottom:6px;color:#0f766e}
-.panel p{margin:3px 0}
-.meta{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.meta div{padding:7px 8px;background:#f8fafc;border:1px solid #eef2f7;border-radius:8px}
-.meta span{display:block;font-size:10px;color:#64748b}
+.head{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 12px}
+.panel{border:1px solid #d5e7df;border-radius:10px;padding:10px 12px;background:linear-gradient(180deg,#f7fbf9 0%,#ffffff 100%);min-height:132px}
+.panel b.panel-title{display:block;margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid #dceee6;color:#0f766e;font-size:12px}
+.panel .party-name{margin:0 0 6px;font-size:13px;font-weight:800;color:#0f172a}
+.panel .row{display:flex;justify-content:space-between;gap:8px;margin:3px 0;font-size:11.5px}
+.panel .row span{color:#64748b;flex:0 0 auto}
+.panel .row strong{font-weight:600;text-align:left;word-break:break-word}
+.panel .addr{margin-top:6px;font-size:11px;color:#334155;line-height:1.5}
+.meta-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 12px}
+.meta-bar div{padding:8px 10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px}
+.meta-bar span{display:block;font-size:10px;color:#64748b;margin-bottom:2px}
+.meta-bar b{font-size:12.5px}
 table{width:100%;border-collapse:collapse;margin:4px 0 12px}
 th,td{border:1px solid #e2e8f0;padding:7px 8px;text-align:right}
 th{background:#ecfdf5;color:#115e59;font-size:11px}
@@ -1045,7 +1050,7 @@ tbody tr:nth-child(even){background:#f8fafc}
 .actions button{padding:10px 16px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;font:inherit;cursor:pointer}
 .actions button.primary{background:#0f766e;color:#fff;border-color:#0f766e}
 @media print{body{margin:8mm}.sheet{border:none;border-radius:0}.noprint{display:none!important}}
-@media(max-width:640px){.head,.meta,.sign{grid-template-columns:1fr}.brand{flex-direction:column;align-items:flex-start}}
+@media(max-width:640px){.head,.meta-bar,.sign{grid-template-columns:1fr}.brand{flex-direction:column;align-items:flex-start}}
 </style></head><body>
 <div class="sheet">
   <div class="brand">
@@ -1059,20 +1064,28 @@ tbody tr:nth-child(even){background:#f8fafc}
   </div>
   <div class="body">
 <div class="head">
-  <div class="panel party-panel"><b>مشخصات فروشنده</b>
-    <p><strong>${esc(isSaleInvoiceType(invoice.type)?biz.name:party.name)}</strong></p>
-    <p>شناسه ملی: ${esc(isSaleInvoiceType(invoice.type)?biz.nationalId||'—':party.nationalId||'—')} | کد اقتصادی: ${esc(isSaleInvoiceType(invoice.type)?biz.economicCode||'—':party.economicCode||'—')}</p>
-    <p>تلفن: ${esc(isSaleInvoiceType(invoice.type)?biz.phone||'—':party.phone||'—')} | کد پستی: ${esc(isSaleInvoiceType(invoice.type)?biz.postalCode||'—':party.postalCode||'—')}</p>
-    <p>نشانی: ${esc(isSaleInvoiceType(invoice.type)?biz.address||'—':party.address||'—')}</p>
+  <div class="panel">
+    <b class="panel-title">مشخصات ${isSaleInvoiceType(invoice.type)?'فروشنده':'خریدار'}</b>
+    <div class="party-name">${esc(isSaleInvoiceType(invoice.type)?biz.name:party.name)}</div>
+    <div class="row"><span>شناسه/ملی</span><strong>${esc((isSaleInvoiceType(invoice.type)?biz.nationalId:party.nationalId)||'—')}</strong></div>
+    <div class="row"><span>کد اقتصادی</span><strong>${esc((isSaleInvoiceType(invoice.type)?biz.economicCode:party.economicCode)||'—')}</strong></div>
+    ${!isSaleInvoiceType(invoice.type)&&party.registrationNumber?`<div class="row"><span>شماره ثبت</span><strong>${esc(party.registrationNumber)}</strong></div>`:''}
+    <div class="row"><span>تلفن</span><strong>${esc((isSaleInvoiceType(invoice.type)?biz.phone:party.phone)||'—')}</strong></div>
+    <div class="row"><span>کد پستی</span><strong>${esc((isSaleInvoiceType(invoice.type)?biz.postalCode:party.postalCode)||'—')}</strong></div>
+    <div class="addr">نشانی: ${esc((isSaleInvoiceType(invoice.type)?biz.address:party.address)||'—')}</div>
   </div>
-  <div class="panel party-panel"><b>مشخصات خریدار</b>
-    <p><strong>${esc(isSaleInvoiceType(invoice.type)?party.name:biz.name)}</strong></p>
-    <p>شناسه ملی: ${esc(isSaleInvoiceType(invoice.type)?party.nationalId||'—':biz.nationalId||'—')} | کد اقتصادی: ${esc(isSaleInvoiceType(invoice.type)?party.economicCode||'—':biz.economicCode||'—')}</p>
-    <p>تلفن: ${esc(isSaleInvoiceType(invoice.type)?party.phone||'—':biz.phone||'—')} | کد پستی: ${esc(isSaleInvoiceType(invoice.type)?party.postalCode||'—':biz.postalCode||'—')}</p>
-    <p>نشانی: ${esc(isSaleInvoiceType(invoice.type)?party.address||'—':biz.address||'—')}</p>
+  <div class="panel">
+    <b class="panel-title">مشخصات ${isSaleInvoiceType(invoice.type)?'خریدار':'فروشنده'}</b>
+    <div class="party-name">${esc(isSaleInvoiceType(invoice.type)?party.name:biz.name)}</div>
+    <div class="row"><span>شناسه/ملی</span><strong>${esc((isSaleInvoiceType(invoice.type)?party.nationalId:biz.nationalId)||'—')}</strong></div>
+    <div class="row"><span>کد اقتصادی</span><strong>${esc((isSaleInvoiceType(invoice.type)?party.economicCode:biz.economicCode)||'—')}</strong></div>
+    ${isSaleInvoiceType(invoice.type)&&party.registrationNumber?`<div class="row"><span>شماره ثبت</span><strong>${esc(party.registrationNumber)}</strong></div>`:''}
+    <div class="row"><span>تلفن</span><strong>${esc((isSaleInvoiceType(invoice.type)?party.phone:biz.phone)||'—')}</strong></div>
+    <div class="row"><span>کد پستی</span><strong>${esc((isSaleInvoiceType(invoice.type)?party.postalCode:biz.postalCode)||'—')}</strong></div>
+    <div class="addr">نشانی: ${esc((isSaleInvoiceType(invoice.type)?party.address:biz.address)||'—')}</div>
   </div>
 </div>
-<div class="meta invoice-meta">
+<div class="meta-bar">
   <div><span>شماره فاکتور</span><b>${esc(invoice.number)}</b></div>
   <div><span>تاریخ</span><b>${esc(invoice.date)}</b></div>
   <div><span>نوع</span><b>${esc(invoiceTypeTitle(invoice.type))}</b></div>
@@ -1115,7 +1128,8 @@ function buildInvoiceHtml80(invoiceId:string):{title:string;html:string;text:str
   const lineBlocks=invoice.lines.map((l,n)=>`
     <div class="item">
       <div class="item-top"><b>${n+1}. ${esc(l.description)}</b></div>
-      <div class="item-row"><span>${fa(l.quantityMilli/1000)} ${esc(l.unit||'عدد')}</span><span>× ${money(l.unitPriceRial)}</span></div>
+      <div class="item-row"><span>تعداد ${fa(l.quantityMilli/1000)}</span><span>${esc(l.unit||'عدد')}</span></div>
+      <div class="item-row"><span>فی</span><span>${money(l.unitPriceRial)}</span></div>
       ${(l.discountRial||0)>0?`<div class="item-row muted"><span>تخفیف</span><span>${money(l.discountRial||0)}</span></div>`:''}
       <div class="item-row total-line"><span>مبلغ</span><b>${money(l.totalRial)}</b></div>
     </div>`).join('');
@@ -1130,12 +1144,13 @@ function buildInvoiceHtml80(invoiceId:string):{title:string;html:string;text:str
 html,body{margin:0;padding:0;background:#fff;color:#000;font-family:Tahoma,Arial,sans-serif;direction:rtl}
 body{width:76mm;max-width:76mm;padding:2mm;font-size:11px;line-height:1.45}
 h1{font-size:13px;text-align:center;margin:0 0 2px;font-weight:800}
-.sub{text-align:center;font-size:10px;margin:0 0 4px;color:#333}
-.hr{border:0;border-top:1px dashed #000;margin:6px 0}
+.sub{text-align:center;font-size:10px;margin:0 0 3px;color:#333}
+.hr{border:0;border-top:1px dashed #000;margin:5px 0}
 .meta div{display:flex;justify-content:space-between;gap:4px;margin:2px 0}
-.parties{display:grid;grid-template-columns:1fr;gap:4px;margin:5px 0}.parties>div{border:1px solid #999;padding:4px;min-width:0;overflow-wrap:anywhere}.parties b,.parties strong,.parties small{display:block}.parties b{font-size:10px}.parties strong{font-size:10px}.parties small{font-size:8px}
 .meta b{font-weight:700}
-.item{margin:6px 0;padding-bottom:4px;border-bottom:1px dotted #999}
+.party-box{padding:4px 0}
+.party-title{font-size:10px;font-weight:800;margin-bottom:2px}
+.item{margin:5px 0;padding-bottom:4px;border-bottom:1px dotted #999}
 .item-top{margin-bottom:2px}
 .item-row{display:flex;justify-content:space-between;gap:6px;font-size:10px}
 .item-row.total-line{margin-top:2px}
@@ -1147,23 +1162,25 @@ h1{font-size:13px;text-align:center;margin:0 0 2px;font-weight:800}
 </style></head><body>
 ${logoHtml}
 <h1>${esc(biz.name)}</h1>
-<div class="sub">فاکتور ${esc(invoiceTypeTitle(invoice.type))}${biz.phone?` · ${esc(biz.phone)}`:''}</div>
+<div class="sub">فاکتور ${esc(invoiceTypeTitle(invoice.type))}</div>
+${biz.slogan?`<div class="sub">${esc(biz.slogan)}</div>`:''}
+${biz.phone?`<div class="sub">☎ ${esc(biz.phone)}</div>`:''}
 ${biz.address?`<div class="sub">${esc(biz.address)}</div>`:''}
+${biz.nationalId||biz.economicCode?`<div class="sub">${biz.nationalId?`ملی: ${esc(biz.nationalId)}`:''}${biz.nationalId&&biz.economicCode?' · ':''}${biz.economicCode?`اقتصادی: ${esc(biz.economicCode)}`:''}</div>`:''}
 <div class="hr"></div>
 <div class="meta">
   <div><span>شماره</span><b>${esc(invoice.number)}</b></div>
   <div><span>تاریخ</span><b>${esc(invoice.date)}</b></div>
   <div><span>وضعیت</span><b>${invoice.status==='posted'?'قطعی':'پیش‌نویس'}</b></div>
 </div>
-<div class="parties">
-  <div><b>فروشنده</b><strong>${esc(isSaleInvoiceType(invoice.type)?biz.name:party.name)}</strong>
-  <small>${esc(isSaleInvoiceType(invoice.type)?biz.phone:party.phone)}${(isSaleInvoiceType(invoice.type)?biz.nationalId:party.nationalId)?' · شناسه '+esc(isSaleInvoiceType(invoice.type)?biz.nationalId:party.nationalId):''}</small>
-  <small>${esc(isSaleInvoiceType(invoice.type)?biz.address:party.address)}</small>
-  <small>${(isSaleInvoiceType(invoice.type)?biz.economicCode:party.economicCode)?'کد اقتصادی: '+esc(isSaleInvoiceType(invoice.type)?biz.economicCode:party.economicCode):''}${(isSaleInvoiceType(invoice.type)?biz.postalCode:party.postalCode)?' · کدپستی: '+esc(isSaleInvoiceType(invoice.type)?biz.postalCode:party.postalCode):''}</small></div>
-  <div><b>خریدار</b><strong>${esc(isSaleInvoiceType(invoice.type)?party.name:biz.name)}</strong>
-  <small>${esc(isSaleInvoiceType(invoice.type)?party.phone:biz.phone)}${(isSaleInvoiceType(invoice.type)?party.nationalId:biz.nationalId)?' · شناسه '+esc(isSaleInvoiceType(invoice.type)?party.nationalId:biz.nationalId):''}</small>
-  <small>${esc(isSaleInvoiceType(invoice.type)?party.address:biz.address)}</small>
-  <small>${(isSaleInvoiceType(invoice.type)?party.economicCode:biz.economicCode)?'کد اقتصادی: '+esc(isSaleInvoiceType(invoice.type)?party.economicCode:biz.economicCode):''}${(isSaleInvoiceType(invoice.type)?party.postalCode:biz.postalCode)?' · کدپستی: '+esc(isSaleInvoiceType(invoice.type)?party.postalCode:biz.postalCode):''}</small></div>
+<div class="hr"></div>
+<div class="party-box">
+  <div class="party-title">${isSaleInvoiceType(invoice.type)?'خریدار':'فروشنده'}</div>
+  <div><b>${esc(party.name)}</b></div>
+  ${party.phone?`<div class="item-row"><span>تلفن</span><span>${esc(party.phone)}</span></div>`:''}
+  ${party.nationalId?`<div class="item-row"><span>شناسه</span><span>${esc(party.nationalId)}</span></div>`:''}
+  ${party.economicCode?`<div class="item-row"><span>اقتصادی</span><span>${esc(party.economicCode)}</span></div>`:''}
+  ${party.address?`<div class="muted" style="margin-top:2px">${esc(party.address)}</div>`:''}
 </div>
 <div class="hr"></div>
 ${lineBlocks||'<div class="muted">بدون قلم</div>'}
@@ -1174,10 +1191,10 @@ ${lineBlocks||'<div class="muted">بدون قلم</div>'}
   <div class="item-row grand"><span>مبلغ نهایی</span><span>${money(invoice.grossRial)}</span></div>
 </div>
 ${payLines?`<div class="hr"></div><div class="sum"><b>پرداخت</b>${payLines}</div>`:''}
-${invoice.paymentTerms||invoice.dueDate?`<div class="hr"></div>${invoice.paymentTerms?`<div class="muted">شرایط: ${esc(invoice.paymentTerms)}</div>`:''}${invoice.dueDate?`<div class="muted">سررسید: ${esc(invoice.dueDate)}</div>`:''}`:''}
-${invoice.description?`<div class="muted">شرح: ${esc(invoice.description)}</div>`:''}
+${invoice.dueDate?`<div class="item-row muted"><span>سررسید</span><span>${esc(invoice.dueDate)}</span></div>`:''}
+${invoice.paymentTerms?`<div class="hr"></div><div class="muted">شرایط: ${esc(invoice.paymentTerms)}</div>`:''}
 ${invoice.notes?`<div class="muted">توضیح: ${esc(invoice.notes)}</div>`:''}
-<div class="foot">با تشکر از خرید شما</div>
+<div class="foot">با تشکر از خرید شما · ${esc(biz.name)}</div>
 </body></html>`;
   const textLines=[
     title,
