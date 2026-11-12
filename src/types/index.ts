@@ -69,8 +69,16 @@ export interface AppSettings {
   smsUsername?: string;
   smsSender?: string;
   smsCustomUrl?: string;
+  /** آدرس API زمان‌بندی سمت سرور؛ باید پیام را برای زمان آینده صف‌بندی کند */
+  smsScheduleUrl?: string;
+  smsScheduleApiToken?: string;
   /** الگوی پیام پیش‌فرض؛ از {name} {amount} {date} {number} {balance} پشتیبانی می‌شود */
   smsDefaultTemplate?: string;
+  /** هشدار سررسید هنگام ورود؛ پیش‌فرض خاموش */
+  dueReminderEnabled?: boolean;
+  /** اعلان بومی اندروید برای سررسیدها */
+  dueNotificationEnabled?: boolean;
+  dueNotificationTime?: string;
 }
 
 export interface Session {

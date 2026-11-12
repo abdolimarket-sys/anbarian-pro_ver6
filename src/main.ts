@@ -20,6 +20,7 @@ import { initAccountingCommerceUI } from './modules/accounting-commerce-ui';
 import { initAccountingReportsUI } from './modules/accounting-reports';
 import { renderDataHealth } from './modules/data-health';
 import { initUnifiedDatePickers } from './modules/date-picker';
+import { showDueReminderOnEntry } from './modules/due-reminders';
 
 // پیام نهایی ذخیره‌سازی فایل در اپ اندروید (پس از انتخاب پوشه و نوشتن موفق).
 window.addEventListener('anbarin:file-saved', (event: Event) => {
@@ -305,6 +306,7 @@ async function bootApp() {
     updateUndoBtn();
     fillSettingsForm();
     bindBusinessLogoControls();
+    void showDueReminderOnEntry();
     updateRolePreview();
     refreshLists();
     loadSheetJS().then((ok) => console.log('[Anbarin] SheetJS:', ok));
@@ -386,7 +388,7 @@ function renderShell() {
         <div class="logo-area">
           <img class="brand-logo" src="./logo.png" alt="لوگوی انبارین" />
           <div class="brand-title"><strong>انبارین</strong>
-          <span class="version">v1.5.16</span>
+          <span class="version">v1.5.18</span>
           <span class="role-badge" id="roleBadge">—</span></div>
         </div>
         <div class="header-stats" id="headerStats"></div>
@@ -658,6 +660,21 @@ function renderShell() {
 
           
           <div class="card" style="margin-top:12px;padding:12px;border:1px solid var(--border,#dceee0);border-radius:12px;background:var(--bg2,#f7fbf8)">
+            <h3 style="margin:0 0 8px;font-size:1rem">هشدار سررسید</h3>
+            <label class="field" style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <input type="checkbox" id="setDueReminderEnabled" />
+              <span>نمایش هشدار اسناد سررسیدشده هنگام ورود به برنامه</span>
+            </label>
+            <p class="hint" style="margin:0 0 12px">هشدار فقط با فعال‌سازی این گزینه نمایش داده می‌شود و برای جلوگیری از تکرار، در هر روز فقط یک‌بار نشان داده خواهد شد.</p>
+            <label class="field" style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <input type="checkbox" id="setDueNotificationEnabled" />
+              <span>اعلان بومی اندروید برای سررسید اسناد</span>
+            </label>
+            <label class="field" style="display:block;margin-bottom:12px">
+              <span style="font-size:.82rem;font-weight:700;color:var(--text-soft)">ساعت اعلان روز سررسید</span>
+              <input type="time" id="setDueNotificationTime" value="09:00" style="width:100%;margin-top:4px;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)" />
+              <span class="hint" style="font-size:.75rem">اعلان حتی در صورت بسته بودن برنامه، توسط اندروید نمایش داده می‌شود. در نسخه وب فقط هشدار هنگام ورود فعال است.</span>
+            </label>
             <h3 style="margin:0 0 8px;font-size:1rem">ارسال پیامک</h3>
             <p class="hint" style="margin:0 0 10px">اختیاری است. حالت «پیامک گوشی» بدون API کار می‌کند. برای ارسال خودکار: کاوه‌نگار، فراز اس‌ام‌اس، ملی‌پیامک یا آدرس سفارشی.</p>
             <label class="field" style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
@@ -689,6 +706,15 @@ function renderShell() {
             <label class="field" style="display:block;margin-bottom:8px">
               <span style="font-size:.82rem;font-weight:700;color:var(--text-soft)">آدرس سرویس سفارشی</span>
               <input id="setSmsCustomUrl" placeholder="https://example.com/api/sms" style="width:100%;margin-top:4px;direction:ltr;text-align:left;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)" />
+            </label>
+            <label class="field" style="display:block;margin-bottom:8px">
+              <span style="font-size:.82rem;font-weight:700;color:var(--text-soft)">آدرس API زمان‌بندی پیامک (سمت سرور)</span>
+              <input id="setSmsScheduleUrl" placeholder="https://example.com/api/sms/schedule" style="width:100%;margin-top:4px;direction:ltr;text-align:left;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)" />
+              <span class="hint" style="font-size:.75rem">این API باید پیام را در صف سرور ذخیره و در زمان تعیین‌شده ارسال کند؛ ارسال زمان‌بندی‌شده با بسته بودن برنامه نیز از سمت سرور انجام می‌شود.</span>
+            </label>
+            <label class="field" style="display:block;margin-bottom:8px">
+              <span style="font-size:.82rem;font-weight:700;color:var(--text-soft)">توکن اختصاصی API زمان‌بندی</span>
+              <input id="setSmsScheduleApiToken" type="password" autocomplete="off" placeholder="توکن امن API سرور شما" style="width:100%;margin-top:4px;direction:ltr;text-align:left;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text)" />
             </label>
             <label class="field" style="display:block;margin-bottom:8px">
               <span style="font-size:.82rem;font-weight:700;color:var(--text-soft)">الگوی پیام پیش‌فرض</span>

@@ -88,7 +88,12 @@ const DEFAULT_SETTINGS: AppSettings = {
   smsUsername: '',
   smsSender: '',
   smsCustomUrl: '',
+  smsScheduleUrl: '',
+  smsScheduleApiToken: '',
   smsDefaultTemplate: 'سلام {name}، مانده حساب شما {balance} ریال است. {business}',
+  dueReminderEnabled: false,
+  dueNotificationEnabled: false,
+  dueNotificationTime: '09:00',
 };
 
 export function loadSettings(): AppSettings {

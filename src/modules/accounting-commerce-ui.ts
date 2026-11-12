@@ -956,7 +956,7 @@ function buildInvoiceHtml(invoiceId:string, opts?:{internal?:boolean}):{title:st
   });
   let cogsSum=0, costedRev=0;
   const rows=invoice.lines.map((l,n)=>{
-    const base=`<td>${n+1}</td><td>${esc(l.description)}</td><td>${esc(l.unit||'عدد')}</td><td>${fa(l.quantityMilli/1000)}</td><td>${money(l.unitPriceRial)}</td><td>${money(l.discountRial||0)}</td><td>${money(l.totalRial)}</td>`;
+    const base=`<td>${n+1}</td><td>${esc(l.description)}</td><td>${fa(l.quantityMilli/1000)}</td><td>${esc(l.unit||'عدد')}</td><td>${money(l.unitPriceRial)}</td><td>${money(l.discountRial||0)}</td><td>${money(l.totalRial)}</td>`;
     if(!internal) return `<tr>${base}</tr>`;
     const p=lineProfit[n];
     if(p.known){ cogsSum+=p.cogsRial; costedRev+=l.totalRial; }
@@ -1023,7 +1023,7 @@ body{font-family:Tahoma,"Segoe UI",Arial,sans-serif;color:#0f172a;margin:16px;fo
 .brand-meta{padding:8px 16px;background:#f0fdfa;border-bottom:1px solid #cce7e2;color:#115e59;font-size:11px}
 .brand-meta span{margin-left:12px}
 .body{padding:14px 16px}
-.head{display:grid;grid-template-columns:1.2fr .8fr;gap:10px;margin:0 0 12px}
+.head{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 8px}.party-panel{min-width:0}.party-panel p{overflow-wrap:anywhere}.invoice-meta{margin-bottom:12px}
 .panel{border:1px solid #e2e8f0;border-radius:10px;padding:10px 12px;background:#fafbfc}
 .panel b{display:block;margin-bottom:6px;color:#0f766e}
 .panel p{margin:3px 0}
@@ -1059,22 +1059,27 @@ tbody tr:nth-child(even){background:#f8fafc}
   </div>
   <div class="body">
 <div class="head">
-  <div class="panel"><b>مشخصات ${isSaleInvoiceType(invoice.type)?'خریدار':'فروشنده'}</b>
-    <p><strong>${esc(party.name)}</strong></p>
-    <p>شناسه ملی: ${esc(party.nationalId||'—')} | کد اقتصادی: ${esc(party.economicCode||'—')}</p>
-    <p>شماره ثبت: ${esc(party.registrationNumber||'—')}</p>
-    <p>تلفن: ${esc(party.phone||'—')} | کد پستی: ${esc(party.postalCode||'—')}</p>
-    <p>نشانی: ${esc(party.address||'—')}</p>
+  <div class="panel party-panel"><b>مشخصات فروشنده</b>
+    <p><strong>${esc(isSaleInvoiceType(invoice.type)?biz.name:party.name)}</strong></p>
+    <p>شناسه ملی: ${esc(isSaleInvoiceType(invoice.type)?biz.nationalId||'—':party.nationalId||'—')} | کد اقتصادی: ${esc(isSaleInvoiceType(invoice.type)?biz.economicCode||'—':party.economicCode||'—')}</p>
+    <p>تلفن: ${esc(isSaleInvoiceType(invoice.type)?biz.phone||'—':party.phone||'—')} | کد پستی: ${esc(isSaleInvoiceType(invoice.type)?biz.postalCode||'—':party.postalCode||'—')}</p>
+    <p>نشانی: ${esc(isSaleInvoiceType(invoice.type)?biz.address||'—':party.address||'—')}</p>
   </div>
-  <div class="panel meta">
-    <div><span>شماره</span><b>${esc(invoice.number)}</b></div>
-    <div><span>تاریخ</span><b>${esc(invoice.date)}</b></div>
-    <div><span>نوع</span><b>${esc(invoiceTypeTitle(invoice.type))}</b></div>
-    <div><span>وضعیت</span><b>${invoice.status==='posted'?'قطعی':'پیش‌نویس'}</b></div>
+  <div class="panel party-panel"><b>مشخصات خریدار</b>
+    <p><strong>${esc(isSaleInvoiceType(invoice.type)?party.name:biz.name)}</strong></p>
+    <p>شناسه ملی: ${esc(isSaleInvoiceType(invoice.type)?party.nationalId||'—':biz.nationalId||'—')} | کد اقتصادی: ${esc(isSaleInvoiceType(invoice.type)?party.economicCode||'—':biz.economicCode||'—')}</p>
+    <p>تلفن: ${esc(isSaleInvoiceType(invoice.type)?party.phone||'—':biz.phone||'—')} | کد پستی: ${esc(isSaleInvoiceType(invoice.type)?party.postalCode||'—':biz.postalCode||'—')}</p>
+    <p>نشانی: ${esc(isSaleInvoiceType(invoice.type)?party.address||'—':biz.address||'—')}</p>
   </div>
 </div>
+<div class="meta invoice-meta">
+  <div><span>شماره فاکتور</span><b>${esc(invoice.number)}</b></div>
+  <div><span>تاریخ</span><b>${esc(invoice.date)}</b></div>
+  <div><span>نوع</span><b>${esc(invoiceTypeTitle(invoice.type))}</b></div>
+  <div><span>وضعیت</span><b>${invoice.status==='posted'?'قطعی':'پیش‌نویس'}</b></div>
+</div>
 ${internal?`<div style="background:#fff3cd;border:1px solid #f0c36d;padding:8px 12px;margin:0 0 12px;border-radius:8px;font-weight:700">نسخه داخلی / مدیریتی — شامل سود ناخالص — برای مشتری چاپ نشود</div>`:''}
-<table><thead><tr><th>ردیف</th><th>شرح کالا / خدمت</th><th>واحد</th><th>تعداد</th><th>قیمت واحد</th><th>تخفیف</th><th>مبلغ</th>${internal?'<th>بهای</th><th>سود ناخالص</th><th>حاشیه</th>':''}</tr></thead><tbody>${rows}</tbody></table>
+<table><thead><tr><th>ردیف</th><th>شرح کالا / خدمت</th><th>تعداد</th><th>واحد</th><th>قیمت واحد</th><th>تخفیف</th><th>مبلغ</th>${internal?'<th>بهای</th><th>سود ناخالص</th><th>حاشیه</th>':''}</tr></thead><tbody>${rows}</tbody></table>
 <div class="sum">
   <div><span>جمع پس از تخفیف</span><b>${money(invoice.netRial)}</b></div>
   <div><span>مالیات (${fa((invoice.taxRateBps||0)/100)}٪)</span><b>${money(invoice.taxRial)}</b></div>
@@ -1128,6 +1133,7 @@ h1{font-size:13px;text-align:center;margin:0 0 2px;font-weight:800}
 .sub{text-align:center;font-size:10px;margin:0 0 4px;color:#333}
 .hr{border:0;border-top:1px dashed #000;margin:6px 0}
 .meta div{display:flex;justify-content:space-between;gap:4px;margin:2px 0}
+.parties{display:grid;grid-template-columns:1fr;gap:4px;margin:5px 0}.parties>div{border:1px solid #999;padding:4px;min-width:0;overflow-wrap:anywhere}.parties b,.parties strong,.parties small{display:block}.parties b{font-size:10px}.parties strong{font-size:10px}.parties small{font-size:8px}
 .meta b{font-weight:700}
 .item{margin:6px 0;padding-bottom:4px;border-bottom:1px dotted #999}
 .item-top{margin-bottom:2px}
@@ -1148,9 +1154,16 @@ ${biz.address?`<div class="sub">${esc(biz.address)}</div>`:''}
   <div><span>شماره</span><b>${esc(invoice.number)}</b></div>
   <div><span>تاریخ</span><b>${esc(invoice.date)}</b></div>
   <div><span>وضعیت</span><b>${invoice.status==='posted'?'قطعی':'پیش‌نویس'}</b></div>
-  <div><span>${isSaleInvoiceType(invoice.type)?'خریدار':'فروشنده'}</span><b>${esc(party.name)}</b></div>
-  ${party.phone?`<div><span>تلفن</span><b>${esc(party.phone)}</b></div>`:''}
-  ${party.nationalId?`<div><span>شناسه ملی</span><b>${esc(party.nationalId)}</b></div>`:''}
+</div>
+<div class="parties">
+  <div><b>فروشنده</b><strong>${esc(isSaleInvoiceType(invoice.type)?biz.name:party.name)}</strong>
+  <small>${esc(isSaleInvoiceType(invoice.type)?biz.phone:party.phone)}${(isSaleInvoiceType(invoice.type)?biz.nationalId:party.nationalId)?' · شناسه '+esc(isSaleInvoiceType(invoice.type)?biz.nationalId:party.nationalId):''}</small>
+  <small>${esc(isSaleInvoiceType(invoice.type)?biz.address:party.address)}</small>
+  <small>${(isSaleInvoiceType(invoice.type)?biz.economicCode:party.economicCode)?'کد اقتصادی: '+esc(isSaleInvoiceType(invoice.type)?biz.economicCode:party.economicCode):''}${(isSaleInvoiceType(invoice.type)?biz.postalCode:party.postalCode)?' · کدپستی: '+esc(isSaleInvoiceType(invoice.type)?biz.postalCode:party.postalCode):''}</small></div>
+  <div><b>خریدار</b><strong>${esc(isSaleInvoiceType(invoice.type)?party.name:biz.name)}</strong>
+  <small>${esc(isSaleInvoiceType(invoice.type)?party.phone:biz.phone)}${(isSaleInvoiceType(invoice.type)?party.nationalId:biz.nationalId)?' · شناسه '+esc(isSaleInvoiceType(invoice.type)?party.nationalId:biz.nationalId):''}</small>
+  <small>${esc(isSaleInvoiceType(invoice.type)?party.address:biz.address)}</small>
+  <small>${(isSaleInvoiceType(invoice.type)?party.economicCode:biz.economicCode)?'کد اقتصادی: '+esc(isSaleInvoiceType(invoice.type)?party.economicCode:biz.economicCode):''}${(isSaleInvoiceType(invoice.type)?party.postalCode:biz.postalCode)?' · کدپستی: '+esc(isSaleInvoiceType(invoice.type)?party.postalCode:biz.postalCode):''}</small></div>
 </div>
 <div class="hr"></div>
 ${lineBlocks||'<div class="muted">بدون قلم</div>'}
@@ -1161,7 +1174,8 @@ ${lineBlocks||'<div class="muted">بدون قلم</div>'}
   <div class="item-row grand"><span>مبلغ نهایی</span><span>${money(invoice.grossRial)}</span></div>
 </div>
 ${payLines?`<div class="hr"></div><div class="sum"><b>پرداخت</b>${payLines}</div>`:''}
-${invoice.paymentTerms?`<div class="hr"></div><div class="muted">شرایط: ${esc(invoice.paymentTerms)}</div>`:''}
+${invoice.paymentTerms||invoice.dueDate?`<div class="hr"></div>${invoice.paymentTerms?`<div class="muted">شرایط: ${esc(invoice.paymentTerms)}</div>`:''}${invoice.dueDate?`<div class="muted">سررسید: ${esc(invoice.dueDate)}</div>`:''}`:''}
+${invoice.description?`<div class="muted">شرح: ${esc(invoice.description)}</div>`:''}
 ${invoice.notes?`<div class="muted">توضیح: ${esc(invoice.notes)}</div>`:''}
 <div class="foot">با تشکر از خرید شما</div>
 </body></html>`;

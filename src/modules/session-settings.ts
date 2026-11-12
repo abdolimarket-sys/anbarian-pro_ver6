@@ -118,6 +118,13 @@ export function applySettingsFromForm(): void {
   settings.businessPostalCode = text('setBusinessPostalCode');
   // لوگو از طریق input فایل به‌صورت data URL در settings نگه داشته می‌شود (رویداد change)
 
+  const dueReminderEl = g('setDueReminderEnabled') as HTMLInputElement | null;
+  if (dueReminderEl) settings.dueReminderEnabled = !!dueReminderEl.checked;
+  const dueNotificationEl = g('setDueNotificationEnabled') as HTMLInputElement | null;
+  if (dueNotificationEl) settings.dueNotificationEnabled = !!dueNotificationEl.checked;
+  const dueNotificationTimeEl = g('setDueNotificationTime') as HTMLInputElement | null;
+  if (dueNotificationTimeEl && /^([01]\d|2[0-3]):[0-5]\d$/.test(dueNotificationTimeEl.value)) settings.dueNotificationTime = dueNotificationTimeEl.value;
+
   // پیامک (اختیاری)
   const smsEnabledEl = g('setSmsEnabled') as HTMLInputElement | null;
   if (smsEnabledEl) settings.smsEnabled = !!smsEnabledEl.checked;
@@ -127,10 +134,13 @@ export function applySettingsFromForm(): void {
   settings.smsApiKey = text('setSmsApiKey');
   settings.smsSender = text('setSmsSender');
   settings.smsCustomUrl = text('setSmsCustomUrl');
+  settings.smsScheduleUrl = text('setSmsScheduleUrl');
+  settings.smsScheduleApiToken = text('setSmsScheduleApiToken');
   const smsTpl = text('setSmsDefaultTemplate');
   if (smsTpl) settings.smsDefaultTemplate = smsTpl;
 
   saveSettingsNow();
+  window.dispatchEvent(new Event('anbarin:settings-saved'));
   toast('تنظیمات ذخیره شد', 'success');
 }
 
@@ -167,6 +177,10 @@ export function fillSettingsForm(): void {
     if (el) el.checked = checked;
   };
   set('setContinuous', !!settings.continuousScan);
+  set('setDueReminderEnabled', !!settings.dueReminderEnabled);
+  set('setDueNotificationEnabled', !!settings.dueNotificationEnabled);
+  const dueTime = document.getElementById('setDueNotificationTime') as HTMLInputElement | null;
+  if (dueTime) dueTime.value = settings.dueNotificationTime || '09:00';
   set('setAutoNext', settings.autoNextScan !== false);
   set('setSound', !!settings.soundOnScan);
   set('setVibrate', !!settings.vibrateOnScan);
@@ -203,6 +217,8 @@ export function fillSettingsForm(): void {
   fillText('setSmsApiKey', settings.smsApiKey || '');
   fillText('setSmsSender', settings.smsSender || '');
   fillText('setSmsCustomUrl', settings.smsCustomUrl || '');
+  fillText('setSmsScheduleUrl', settings.smsScheduleUrl || '');
+  fillText('setSmsScheduleApiToken', settings.smsScheduleApiToken || '');
   fillText('setSmsDefaultTemplate', settings.smsDefaultTemplate || '');
 
   const logoPrev = document.getElementById('setBusinessLogoPreview') as HTMLImageElement | null;

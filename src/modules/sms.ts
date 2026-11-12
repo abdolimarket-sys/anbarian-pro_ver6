@@ -225,7 +225,7 @@ async function sendCustom(phone: string, message: string): Promise<void> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      ...(settings.smsApiKey ? { Authorization: `Bearer ${settings.smsApiKey.trim()}` } : {}),
+      ...(settings.smsScheduleApiToken ? { Authorization: `Bearer ${settings.smsScheduleApiToken.trim()}` } : {}),
     },
     body: JSON.stringify({
       phone,
@@ -279,6 +279,53 @@ export async function sendSms(payload: SmsPayload): Promise<{ ok: true; mode: Sm
   throw new Error('ارائه‌دهنده پیامک ناشناخته است');
 }
 
+/** ثبت پیامک در صف API زمان‌بندی‌شده سمت سرور؛ ارسال در زمان تعیین‌شده مستقل از باز بودن اپ است. */
+export async function scheduleSms(payload: SmsPayload, scheduledAt: string): Promise<{ ok: true; id?: string }> {
+  if (!settings.smsEnabled) throw new Error('ارسال پیامک در تنظیمات غیرفعال است');
+  if ((settings.smsProvider || 'device') === 'device') throw new Error('برای زمان‌بندی پیامک باید سرویس API انتخاب شود');
+  const endpoint = String(settings.smsScheduleUrl || '').trim();
+  if (!endpoint) throw new Error('آدرس API زمان‌بندی را در تنظیمات وارد کنید');
+  if (!String(settings.smsScheduleApiToken || '').trim()) throw new Error('توکن اختصاصی API زمان‌بندی را در تنظیمات وارد کنید');
+  let url: URL;
+  try { url = new URL(endpoint); } catch { throw new Error('آدرس API زمان‌بندی معتبر نیست'); }
+  if (url.protocol !== 'https:' && url.hostname !== 'localhost' && url.hostname !== '127.0.0.1') throw new Error('آدرس API زمان‌بندی باید HTTPS باشد');
+  const phone = normalizeIranMobile(payload.phone);
+  if (!phone) throw new Error('شماره موبایل معتبر نیست');
+  const message = String(payload.message || '').trim();
+  if (!message || message.length > 900) throw new Error('متن پیامک خالی یا بیش از حد طولانی است');
+  const when = new Date(scheduledAt);
+  if (!Number.isFinite(when.getTime()) || when.getTime() < Date.now() + 60_000) throw new Error('زمان ارسال باید حداقل یک دقیقه در آینده باشد');
+  const idempotencySource = `${phone}|${message}|${when.toISOString()}|${settings.smsProvider || 'custom'}`;
+  let idempotencyHash = 2166136261;
+  for (let i = 0; i < idempotencySource.length; i++) idempotencyHash = Math.imul(idempotencyHash ^ idempotencySource.charCodeAt(i), 16777619);
+  const idempotencyKey = (idempotencyHash >>> 0).toString(16).padStart(8, '0');
+  const response = await fetch(url.toString(), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(settings.smsScheduleApiToken ? { Authorization: `Bearer ${settings.smsScheduleApiToken.trim()}` } : {}),
+    },
+    body: JSON.stringify({
+      action: 'schedule',
+      idempotencyKey,
+      provider: settings.smsProvider || 'custom',
+      phone,
+      message,
+      sender: (settings.smsSender || '').trim() || undefined,
+      username: (settings.smsUsername || '').trim() || undefined,
+      scheduledAt: when.toISOString(),
+      timezoneOffsetMinutes: new Date().getTimezoneOffset(),
+      business: settings.businessName || '',
+    }),
+  });
+  let data: any = null;
+  try { data = await response.json(); } catch { /* empty body */ }
+  if (!response.ok || data?.ok === false || data?.success === false) {
+    throw new Error(data?.message || data?.error || `ثبت زمان‌بندی ناموفق بود (${response.status})`);
+  }
+  return { ok: true, id: data?.id ? String(data.id) : undefined };
+}
+
 export async function sendTemplatedSms(
   phone: string,
   vars: SmsTemplateVars = {},
@@ -322,9 +369,14 @@ export function openSmsComposeDialog(opts: {
         <span style="font-size:.82rem;color:var(--text-soft,#666)">متن پیام</span>
         <textarea id="smsDlgMessage" rows="4" style="width:100%;margin-top:4px;padding:8px;border-radius:8px;border:1px solid var(--border,#ccc);background:var(--bg,#fff);color:inherit;resize:vertical">${escapeHtml(msg)}</textarea>
       </label>
+      <label class="field" style="display:block;margin-bottom:10px">
+        <span style="font-size:.82rem;color:var(--text-soft,#666)">زمان ارسال (اختیاری برای زمان‌بندی)</span>
+        <input id="smsDlgScheduleAt" type="datetime-local" style="width:100%;margin-top:4px;padding:8px;border-radius:8px;border:1px solid var(--border,#ccc);background:var(--bg,#fff);color:inherit;direction:ltr" />
+      </label>
       <div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
         <button type="button" class="btn btn-secondary" id="smsDlgCancel">انصراف</button>
-        <button type="button" class="btn btn-primary" id="smsDlgSend">ارسال</button>
+        <button type="button" class="btn btn-secondary" id="smsDlgSchedule">زمان‌بندی</button>
+        <button type="button" class="btn btn-primary" id="smsDlgSend">ارسال فوری</button>
       </div>
       <p class="hint" style="margin:10px 0 0;font-size:.78rem">اگر سرویس API تنظیم نشده باشد، برنامه پیامک گوشی باز می‌شود.</p>
     </div>
@@ -336,6 +388,22 @@ export function openSmsComposeDialog(opts: {
   wrap.addEventListener('click', (e) => {
     if (e.target === wrap) close();
   });
+  wrap.querySelector('#smsDlgSchedule')?.addEventListener('click', async () => {
+    const p = (document.getElementById('smsDlgPhone') as HTMLInputElement | null)?.value || '';
+    const m = (document.getElementById('smsDlgMessage') as HTMLTextAreaElement | null)?.value || '';
+    const at = (document.getElementById('smsDlgScheduleAt') as HTMLInputElement | null)?.value || '';
+    const btn = document.getElementById('smsDlgSchedule') as HTMLButtonElement | null;
+    if (btn) { btn.disabled = true; btn.textContent = 'در حال ثبت...'; }
+    try {
+      const result = await scheduleSms({ phone: p, message: m }, at);
+      toast(result.id ? `پیامک زمان‌بندی شد (${result.id})` : 'پیامک در صف ارسال زمان‌بندی‌شده ثبت شد', 'success');
+      close();
+    } catch (err) {
+      toast(err instanceof Error ? err.message : 'زمان‌بندی پیامک ناموفق بود', 'error');
+      if (btn) { btn.disabled = false; btn.textContent = 'زمان‌بندی'; }
+    }
+  });
+
   wrap.querySelector('#smsDlgSend')?.addEventListener('click', async () => {
     const p = (document.getElementById('smsDlgPhone') as HTMLInputElement | null)?.value || '';
     const m = (document.getElementById('smsDlgMessage') as HTMLTextAreaElement | null)?.value || '';

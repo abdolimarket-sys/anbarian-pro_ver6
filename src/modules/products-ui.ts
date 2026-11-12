@@ -54,28 +54,30 @@ function ensureModal(): HTMLElement {
         <label class="field"><span>کد کالا (SKU)</span><input id="productSku" style="direction:ltr;text-align:left" autocomplete="off" /></label>
         <div style="display:flex;gap:8px">
           <label class="field" style="flex:1"><span>موجودی سیستم</span><input id="productSystemQty" type="number" step="any" value="0" /></label>
-          <label class="field" style="flex:1"><span>واحد پایه</span><input id="productUnit" list="anbarin-unit-list" value="عدد" placeholder="انتخاب یا تایپ" autocomplete="off" /></label>
+          <label class="field" style="flex:1"><span>واحد پایه</span>
+            <select id="productUnit">
+              <option value="عدد">عدد</option>
+              <option value="کیلوگرم">کیلوگرم</option>
+              <option value="گرم">گرم</option>
+              <option value="میلی‌گرم">میلی‌گرم</option>
+              <option value="لیتر">لیتر</option>
+              <option value="میلی‌لیتر">میلی‌لیتر</option>
+              <option value="متر">متر</option>
+              <option value="سانتی‌متر">سانتی‌متر</option>
+              <option value="مترمربع">مترمربع</option>
+              <option value="جفت">جفت</option>
+              <option value="دست">دست</option>
+              <option value="شاخه">شاخه</option>
+              <option value="رول">رول</option>
+              <option value="قوطی">قوطی</option>
+              <option value="بسته">بسته</option>
+              <option value="کارتن">کارتن</option>
+              <option value="جعبه">جعبه</option>
+              <option value="گونی">گونی</option>
+              <option value="پالت">پالت</option>
+            </select>
+          </label>
         </div>
-        <datalist id="anbarin-unit-list">
-          <option value="عدد"></option>
-          <option value="کیلوگرم"></option>
-          <option value="گرم"></option>
-          <option value="لیتر"></option>
-          <option value="میلی‌لیتر"></option>
-          <option value="متر"></option>
-          <option value="سانتی‌متر"></option>
-          <option value="مترمربع"></option>
-          <option value="جفت"></option>
-          <option value="دست"></option>
-          <option value="شاخه"></option>
-          <option value="رول"></option>
-          <option value="قوطی"></option>
-          <option value="بسته"></option>
-          <option value="کارتن"></option>
-          <option value="جعبه"></option>
-          <option value="گونی"></option>
-          <option value="پالت"></option>
-        </datalist>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <label class="field" style="flex:1;min-width:120px"><span>قیمت خرید</span><input id="productPurchasePrice" type="number" step="any" min="0" value="0" inputmode="decimal" title="بهای خرید کالا" /></label>
           <label class="field" style="flex:1;min-width:120px"><span>قیمت مصرف‌کننده</span><input id="productConsumerPrice" type="number" step="any" min="0" value="0" inputmode="decimal" /></label>
@@ -151,6 +153,19 @@ function ensureModal(): HTMLElement {
   });
 
   return modal;
+}
+
+function ensureProductUnitOption(unit: string): void {
+  const select = document.getElementById('productUnit') as HTMLSelectElement | null;
+  const value = (unit || '').trim();
+  if (!select || !value) return;
+  const exists = Array.from(select.options).some((option) => option.value === value);
+  if (!exists) {
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = value;
+    select.appendChild(option);
+  }
 }
 
 function val(id: string): string {
@@ -267,7 +282,7 @@ export function openProductModal(
     if (el) el.value = '';
   });
 
-  (document.getElementById('productUnit') as HTMLInputElement).value = 'عدد';
+  (document.getElementById('productUnit') as HTMLSelectElement).value = 'عدد';
   (document.getElementById('productUnitFactor') as HTMLInputElement).value = '1';
   (document.getElementById('productSystemQty') as HTMLInputElement).value = '0';
   (document.getElementById('productPurchasePrice') as HTMLInputElement).value = '0';
@@ -291,7 +306,8 @@ export function openProductModal(
     (document.getElementById('productCode') as HTMLInputElement).value = p.code || '';
     (document.getElementById('productSku') as HTMLInputElement).value = p.sku || '';
     (document.getElementById('productSystemQty') as HTMLInputElement).value = String(roundQty(Number(p.systemQty) || 0));
-    (document.getElementById('productUnit') as HTMLInputElement).value = p.unit || 'عدد';
+    ensureProductUnitOption(p.unit || 'عدد');
+    (document.getElementById('productUnit') as HTMLSelectElement).value = p.unit || 'عدد';
     (document.getElementById('productPurchasePrice') as HTMLInputElement).value = String(p.purchasePrice ?? 0);
     const consumer = Number(p.consumerPrice ?? 0);
     const sell = Number(p.price ?? 0);

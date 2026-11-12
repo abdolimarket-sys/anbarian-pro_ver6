@@ -3306,3 +3306,94 @@ body > .invoice-jalali-calendar {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* اصلاح فضای روش دریافت/پرداخت: مبلغ در ردیف مستقل و بالای دکمه حذف */
+.settlement-stage-card .settlement-stage-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+.settlement-stage-card .settlement-method-picker,
+.settlement-stage-card .settlement-amount-field {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+}
+.settlement-stage-card .settlement-amount-field input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  box-sizing: border-box;
+  padding-inline: 14px;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.settlement-stage-card .settlement-remove-btn {
+  grid-column: 1 / -1;
+  justify-self: start;
+  min-width: 96px;
+  min-height: 42px;
+}
+
+
+
+/* Receive / payment section: scoped responsive button system */
+#accountingCommerceWorkspace .cash-entry-card button,
+#commercePanelSheet .cash-entry-card button{
+  box-sizing:border-box;
+  min-height:40px;
+  height:40px;
+  max-width:100%;
+  width:auto;
+  padding:0 16px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border-radius:10px;
+  font:inherit;
+  font-size:14px;
+  font-weight:600;
+  line-height:1.2;
+  white-space:normal;
+  vertical-align:middle;
+}
+#accountingCommerceWorkspace .cash-entry-card #cashSave,
+#commercePanelSheet .cash-entry-card #cashSave{
+  min-width:104px;
+  margin-inline-start:auto;
+}
+#accountingCommerceWorkspace .cash-entry-card .table-wrap,
+#commercePanelSheet .cash-entry-card .table-wrap{
+  max-width:100%;
+  overflow-x:auto;
+  overscroll-behavior-inline:contain;
+  -webkit-overflow-scrolling:touch;
+}
+#accountingCommerceWorkspace .cash-entry-card .data-table button,
+#commercePanelSheet .cash-entry-card .data-table button{
+  margin:3px 2px;
+}
+@media(max-width:640px){
+  #accountingCommerceWorkspace .cash-entry-card button,
+  #commercePanelSheet .cash-entry-card button{
+    min-height:40px;
+    height:auto;
+    min-width:0;
+    padding:9px 12px;
+    font-size:13px;
+  }
+  #accountingCommerceWorkspace .cash-entry-card #cashSave,
+  #commercePanelSheet .cash-entry-card #cashSave{
+    width:100%;
+    margin:0;
+  }
+  #accountingCommerceWorkspace .cash-entry-card .data-table,
+  #commercePanelSheet .cash-entry-card .data-table{
+    min-width:620px;
+  }
+}
