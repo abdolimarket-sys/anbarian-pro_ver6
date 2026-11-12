@@ -11,6 +11,7 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(DriveBackupPlugin.class);
         registerPlugin(BiometricPlugin.class);
         registerPlugin(NativePrintPlugin.class);
+        registerPlugin(DueNotificationsPlugin.class);
         super.onCreate(savedInstanceState);
     }
 }

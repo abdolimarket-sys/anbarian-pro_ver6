@@ -4,6 +4,8 @@
     <!-- دوربین برای اسکن بارکد -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <!-- اختیاری: بعضی WebViewها برای فایل/عکس -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
@@ -37,6 +39,13 @@
             </intent-filter>
 
         </activity>
+
+        <receiver android:name=".DueNotificationReceiver" android:enabled="true" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.anbarian.app.DUE_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
 
         <provider
             android:name="androidx.core.content.FileProvider"

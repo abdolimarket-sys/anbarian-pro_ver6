@@ -20,8 +20,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         // هر انتشار جدید باید versionCode بزرگ‌تری از نسخه قبلی داشته باشد.
-        versionCode 27
-        versionName "1.5.16"
+        versionCode 28
+        versionName "1.5.18"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
