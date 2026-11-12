@@ -52,7 +52,7 @@ let saveInvoiceDraftHandler: ((quiet?:boolean)=>Promise<string|null>) | null = n
 const invoiceTypeTitle=(t:InvoiceType)=>t==='sale'?'فاکتور فروش':t==='purchase'?'فاکتور خرید':t==='return-sale'?'برگشت از فروش':t==='return-purchase'?'برگشت از خرید':'پیش‌فاکتور';
 let fiscalPeriodsCache: Array<{id:string;startDate:string;endDate:string;status:string}> = [];
 const fa=(n:number)=>new Intl.NumberFormat('fa-IR').format(n);
-const esc=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
+const esc=(s:string | undefined)=> (s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const digits=(s:string)=>s.replace(/[۰-۹]/g,d=>String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d))).replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
 const el=<T extends HTMLElement>(s:string)=>document.querySelector<T>(s);
 /** اولویت با برگه باز فاکتور؛ اگر برگه باز است workspace (فرم خالی بعد از render) خوانده نشود */
@@ -1159,11 +1159,11 @@ ${biz.address?`<div class="sub">${esc(biz.address)}</div>`:''}
   <div><b>فروشنده</b><strong>${esc(isSaleInvoiceType(invoice.type)?biz.name:party.name)}</strong>
   <small>${esc(isSaleInvoiceType(invoice.type)?biz.phone:party.phone)}${(isSaleInvoiceType(invoice.type)?biz.nationalId:party.nationalId)?' · شناسه '+esc(isSaleInvoiceType(invoice.type)?biz.nationalId:party.nationalId):''}</small>
   <small>${esc(isSaleInvoiceType(invoice.type)?biz.address:party.address)}</small>
-  <small>${(isSaleInvoiceType(invoice.type)?biz.economicCode:party.economicCode)?'کد اقتصادی: '+esc((isSaleInvoiceType(invoice.type)?biz.economicCode:party.economicCode)??''):''}${(isSaleInvoiceType(invoice.type)?biz.postalCode:party.postalCode)?' · کدپستی: '+esc((isSaleInvoiceType(invoice.type)?biz.postalCode:party.postalCode)??''):''}</small></div>
+  <small>${(isSaleInvoiceType(invoice.type)?biz.economicCode:party.economicCode)?'کد اقتصادی: '+esc((isSaleInvoiceType(invoice.type)?biz.economicCode:party.economicCode) ?? ''):''}${(isSaleInvoiceType(invoice.type)?biz.postalCode:party.postalCode)?' · کدپستی: '+esc((isSaleInvoiceType(invoice.type)?biz.postalCode:party.postalCode) ?? ''):''}</small></div>
   <div><b>خریدار</b><strong>${esc(isSaleInvoiceType(invoice.type)?party.name:biz.name)}</strong>
   <small>${esc(isSaleInvoiceType(invoice.type)?party.phone:biz.phone)}${(isSaleInvoiceType(invoice.type)?party.nationalId:biz.nationalId)?' · شناسه '+esc(isSaleInvoiceType(invoice.type)?party.nationalId:biz.nationalId):''}</small>
   <small>${esc(isSaleInvoiceType(invoice.type)?party.address:biz.address)}</small>
-  <small>${(isSaleInvoiceType(invoice.type)?party.economicCode:biz.economicCode)?'کد اقتصادی: '+esc((isSaleInvoiceType(invoice.type)?party.economicCode:biz.economicCode)??''):''}${(isSaleInvoiceType(invoice.type)?party.postalCode:biz.postalCode)?' · کدپستی: '+esc((isSaleInvoiceType(invoice.type)?party.postalCode:biz.postalCode)??''):''}</small></div>
+  <small>${(isSaleInvoiceType(invoice.type)?party.economicCode:biz.economicCode)?'کد اقتصادی: '+esc((isSaleInvoiceType(invoice.type)?party.economicCode:biz.economicCode) ?? ''):''}${(isSaleInvoiceType(invoice.type)?party.postalCode:biz.postalCode)?' · کدپستی: '+esc((isSaleInvoiceType(invoice.type)?party.postalCode:biz.postalCode) ?? ''):''}</small></div>
 </div>
 <div class="hr"></div>
 ${lineBlocks||'<div class="muted">بدون قلم</div>'}
